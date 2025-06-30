@@ -10,7 +10,7 @@ import {
 } from "../../../utils/AdminHelper";
 import UserChart from "./UserChart";
 import DeviceChart from "./DeviceChart";
-import PermissionHeatmap from "./PermissionHeatMap.jsx";
+import PermissionHeatmap from "./PermissionHeatmap.jsx";
 import "react-calendar-heatmap/dist/styles.css";
 import "./AdminSummaryHeatMap.css";
 
