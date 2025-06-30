@@ -15,7 +15,7 @@ const AddStudent = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0]; 
+    const today = new Date().toISOString().split("T")[0];
     setEnrollDate(today);
   }, []);
 
@@ -74,9 +74,9 @@ const AddStudent = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-md mx-auto bg-white p-6 rounded-lg shadow-md space-y-4 mt-20"
+      className="w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-md space-y-4 mt-10 sm:mt-16 md:mt-20"
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6 gap-2">
         <button
           type="button"
           onClick={() => navigate(-1)}
@@ -96,19 +96,19 @@ const AddStudent = () => {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Quay lại
+          <span className="hidden sm:inline">Quay lại</span>
         </button>
-        <h2 className="text-2xl font-bold text-center text-blue-600 flex-1">
+        <h2 className="text-xl sm:text-2xl font-bold text-center text-blue-600 flex-1">
           Thêm sinh viên
         </h2>
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Chọn người dùng</label>
+        <label className="block text-sm font-medium mb-1">Chọn người dùng</label>
         <select
           value={selectedUserId}
           onChange={(e) => setSelectedUserId(e.target.value)}
-          className="border rounded px-3 py-2 w-full"
+          className="border rounded px-3 py-2 w-full text-sm"
           required
         >
           <option value="">-- Chọn --</option>
@@ -121,29 +121,29 @@ const AddStudent = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Mã sinh viên</label>
+        <label className="block text-sm font-medium mb-1">Mã sinh viên</label>
         <input
           type="text"
           value={studentCode}
           onChange={(e) => setStudentCode(e.target.value)}
-          className="border rounded px-3 py-2 w-full"
+          className="border rounded px-3 py-2 w-full text-sm"
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Ngày đăng ký</label>
+        <label className="block text-sm font-medium mb-1">Ngày đăng ký</label>
         <input
           type="date"
           value={enrollDate}
           disabled
-          className="border rounded px-3 py-2 w-full bg-gray-100 text-gray-700"
+          className="border rounded px-3 py-2 w-full bg-gray-100 text-gray-700 text-sm"
         />
       </div>
 
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-base font-semibold"
       >
         Thêm sinh viên
       </button>

@@ -21,8 +21,6 @@ const UpdatePermission = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    console.log(formData);
-
     try {
       const response = await axios.put(
         `${env.BE_API_PATH}/Permission/update-permission/${permission.id}`,
@@ -35,13 +33,13 @@ const UpdatePermission = ({
       );
       onSuccess(response.data.message);
     } catch (err) {
-      console.log(err);
       setError(err?.response?.data?.message || "Cập nhật thất bại");
     }
   };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <p className="text-red-500">{error}</p>}
+    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
+      {error && <p className="text-red-500 text-sm">{error}</p>}
       <div>
         <label className="block text-sm font-medium mb-2">
           Chọn người dùng
@@ -87,7 +85,7 @@ const UpdatePermission = ({
             }
             e.target.value = "";
           }}
-          className="border rounded px-3 py-2 w-full"
+          className="border rounded px-3 py-2 w-full text-sm"
         >
           <option value="" key="default-student">
             -- Chọn người dùng --
@@ -147,7 +145,7 @@ const UpdatePermission = ({
             }
             e.target.value = "";
           }}
-          className="border rounded px-3 py-2 w-full"
+          className="border rounded px-3 py-2 w-full text-sm"
         >
           <option value="" key="default-student">
             -- Chọn thiết bị --
@@ -162,37 +160,42 @@ const UpdatePermission = ({
         </select>
       </div>
 
-      <div className="flex items-center gap-4 flex-wrap">
-        <input
-          type="date"
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={formData.timeStart.split("T")[0]}
-          onChange={(e) => {
-            setFormData({ ...formData, timeStart: e.target.value });
-          }}
-        />
-
-        <input
-          type="date"
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={formData.timeEnd.split("T")[0]}
-          onChange={(e) => {
-            setFormData({ ...formData, timeEnd: e.target.value });
-          }}
-        />
+      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-10 flex-wrap">
+        <div className="w-full sm:w-1/2">
+          <label className="block text-sm font-medium">Ngày bắt đầu</label>
+          <input
+            type="date"
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+            value={formData.timeStart.split("T")[0]}
+            onChange={(e) => {
+              setFormData({ ...formData, timeStart: e.target.value });
+            }}
+          />
+        </div>
+        <div className="w-full sm:w-1/2">
+          <label className="block text-sm font-medium">Ngày kết thúc</label>
+          <input
+            type="date"
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+            value={formData.timeEnd.split("T")[0]}
+            onChange={(e) => {
+              setFormData({ ...formData, timeEnd: e.target.value });
+            }}
+          />
+        </div>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <button
           type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          className="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm sm:text-base"
         >
           Lưu
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+          className="w-full sm:w-auto bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 text-sm sm:text-base"
         >
           Hủy
         </button>

@@ -72,8 +72,8 @@ function Register() {
 
   return (
     <div className="flex flex-col items-center h-screen justify-center bg-gradient-to-b from-blue-200 to-blue-400 space-y-6">
-      <div className="border shadow-lg rounded-lg p-6 w-96 bg-white">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">
+      <div className="border shadow-lg rounded-lg p-4 sm:p-6 w-full max-w-md bg-white">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-blue-600">
           Đăng ký
         </h2>
         {error && <p className="text-red-500">{error}</p>}

@@ -21,6 +21,11 @@ export const columns = [
       width: "200px",
     },
     {
+      name: "Trạng thái",
+      selector: (row) => row.active ? "Đang hoạt động" : "Không hoạt động",
+      width: "200px",
+    },
+    {
       name: "Thao tác",
       selector: (row) => row.action,
       center: "true",

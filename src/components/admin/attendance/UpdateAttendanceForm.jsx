@@ -35,8 +35,8 @@ const UpdateAttendanceForm = ({ attendance, onSuccess, onCancel, lecturers, stud
     }
   };
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {error && <p className="text-red-500">{error}</p>}
+    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
+      {error && <p className="text-red-500 text-sm">{error}</p>}
       <div>
         <label className="block text-sm font-medium mb-2">Chọn giảng viên</label>
         <select
@@ -44,7 +44,7 @@ const UpdateAttendanceForm = ({ attendance, onSuccess, onCancel, lecturers, stud
           onChange={(e) =>
             setFormData({ ...formData, lecturerId: e.target.value })
           }
-          className="border rounded px-3 py-2 w-full"
+          className="border rounded px-3 py-2 w-full text-sm"
           required
         >
           <option value="" key="default-lecturer">
@@ -139,17 +139,17 @@ const UpdateAttendanceForm = ({ attendance, onSuccess, onCancel, lecturers, stud
         </select>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <button
           type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          className="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm sm:text-base"
         >
           Lưu
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+          className="w-full sm:w-auto bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 text-sm sm:text-base"
         >
           Hủy
         </button>

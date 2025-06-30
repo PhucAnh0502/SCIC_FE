@@ -20,7 +20,7 @@ const CreatePermission = () => {
 
   const fetchData = async () => {
     const [devices, users] = await Promise.all([
-      getAllDevices(99, 0), //Please check params in AdminHelper.jsx
+      getAllDevices(99, 0),
       getAllUsers(),
     ]);
     setDevices(devices);
@@ -43,7 +43,6 @@ const CreatePermission = () => {
       return;
     }
     try {
-        console.log(formData)
       const response = await axios.post(
         `${env.BE_API_PATH}/Permission/create-permission`,
         formData,
@@ -58,7 +57,6 @@ const CreatePermission = () => {
         navigate("/admin-dashboard/permissions");
       }
     } catch (error) {
-      console.log(error);
       alert(error?.response?.data?.message || "Có lỗi khi phân quyền");
     }
   };
@@ -66,13 +64,13 @@ const CreatePermission = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-md mx-auto bg-white p-6 rounded-lg shadow-md space-y-4 mt-20"
+      className="w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-md space-y-4 mt-10 sm:mt-16 md:mt-20"
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6 gap-2">
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition text-sm sm:text-base"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -88,23 +86,22 @@ const CreatePermission = () => {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Quay lại
+          <span className="hidden xs:inline">Quay lại</span>
         </button>
-        <h2 className="text-2xl font-bold text-center text-blue-600 flex-1">
+        <h2 className="text-xl sm:text-2xl font-bold text-center text-blue-600 flex-1">
           Phân quyền
         </h2>
-        {errorMessage && (
-          <div className="text-red-600 text-sm bg-red-100 px-4 py-2 rounded border border-red-300 mb-4">
-            ⚠️ {errorMessage}
-          </div>
-        )}
       </div>
+      {errorMessage && (
+        <div className="text-red-600 text-sm bg-red-100 px-4 py-2 rounded border border-red-300 mb-2">
+          ⚠️ {errorMessage}
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-medium mb-2">
           Chọn người dùng
         </label>
-
         {/* Thẻ người dùng đã chọn */}
         <div className="flex flex-wrap gap-2 mb-2">
           {formData.userIds.map((id) => {
@@ -121,7 +118,7 @@ const CreatePermission = () => {
                   onClick={() =>
                     setFormData({
                       ...formData,
-                      studentIds: formData.studentIds.filter(
+                      userIds: formData.userIds.filter(
                         (sid) => sid !== id
                       ),
                     })
@@ -134,7 +131,6 @@ const CreatePermission = () => {
             );
           })}
         </div>
-
         {/* Danh sách người dùng chưa chọn */}
         <select
           onChange={(e) => {
@@ -147,7 +143,7 @@ const CreatePermission = () => {
             }
             e.target.value = "";
           }}
-          className="border rounded px-3 py-2 w-full"
+          className="border rounded px-3 py-2 w-full text-sm"
         >
           <option value="" key="default-student">
             -- Chọn người dùng --
@@ -164,7 +160,6 @@ const CreatePermission = () => {
 
       <div>
         <label className="block text-sm font-medium mb-2">Chọn thiết bị</label>
-
         {/* Thẻ thiết bị đã chọn */}
         <div className="flex flex-wrap gap-2 mb-2">
           {formData.deviceIds.map((id) => {
@@ -192,7 +187,6 @@ const CreatePermission = () => {
             );
           })}
         </div>
-
         {/* Danh sách thiết bị chưa chọn */}
         <select
           onChange={(e) => {
@@ -205,7 +199,7 @@ const CreatePermission = () => {
             }
             e.target.value = "";
           }}
-          className="border rounded px-3 py-2 w-full"
+          className="border rounded px-3 py-2 w-full text-sm"
         >
           <option value="" key="default-student">
             -- Chọn thiết bị --
@@ -219,24 +213,24 @@ const CreatePermission = () => {
             ))}
         </select>
       </div>
-      <div className="flex items-center gap-10 flex-wrap ">
-        <div>
+
+      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-10 flex-wrap">
+        <div className="w-full sm:w-1/2">
           <label className="block text-sm font-medium">Ngày bắt đầu</label>
           <input
             type="date"
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             value={formData.timeStart}
             onChange={(e) =>
               setFormData({ ...formData, timeStart: e.target.value })
             }
           />
         </div>
-
-        <div>
+        <div className="w-full sm:w-1/2">
           <label className="block text-sm font-medium">Ngày kết thúc</label>
           <input
             type="date"
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             value={formData.timeEnd}
             onChange={(e) =>
               setFormData({ ...formData, timeEnd: e.target.value })
@@ -249,7 +243,7 @@ const CreatePermission = () => {
       <div className="flex justify-center">
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-base font-semibold"
         >
           Lập lịch phân quyền
         </button>

@@ -38,14 +38,14 @@ const ForgotPassword = () => {
 
   return (
     <div className="flex flex-col items-center h-screen justify-center bg-gradient-to-b from-blue-100 to-blue-300 space-y-6">
-      <div className="border shadow-lg rounded-lg p-6 w-96 bg-white">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">
+      <div className="border shadow-lg rounded-lg p-4 sm:p-6 w-full max-w-md bg-white">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-blue-600">
           Quên mật khẩu
         </h2>
         {message && <p className="text-green-500">{message}</p>}
         {error && <p className="text-red-500">{error}</p>}
         <form
-          className="rounded-lg border border-gray-200 p-6"
+          className="rounded-lg border border-gray-200 p-4 sm:p-6"
           onSubmit={handleSubmit}
         >
           <div className="mb-4">

@@ -63,8 +63,8 @@ const StudentList = () => {
   const filterStudents = (search) => {
     const data = students.filter((student) => {
       const matchesSearch =
-        student.fullName.toLowerCase().includes(search.toLowerCase()) ||
-        student.studentCode.toLowerCase().includes(search.toLowerCase());
+        (student.fullName?.toLowerCase() || "").includes(search.toLowerCase()) ||
+        (student.studentCode?.toLowerCase() || "").includes(search.toLowerCase());
       return matchesSearch;
     });
     setFilteredStudents(data);
@@ -87,19 +87,34 @@ const StudentList = () => {
     );
 
   return (
-    <div className="p-5">
+    <div className="p-2 sm:p-4 md:p-8 bg-gray-50 min-h-screen">
       <div className="text-center">
-        <h3 className="text-2xl font-bold mb-5">Quản lý sinh viên</h3>
+        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">Quản lý sinh viên</h3>
       </div>
 
-      <StudentListFilters
-        searchText={searchText}
-        handleSearchChange={handleSearchChange}
-        handleAddStudent={handleAddStudent}
-      />
+      <div className="mb-4">
+        <StudentListFilters
+          searchText={searchText}
+          handleSearchChange={handleSearchChange}
+          handleAddStudent={handleAddStudent}
+        />
+      </div>
 
-      <div className="mt-5">
-        <DataTable columns={columns} data={filteredStudents} pagination />
+      <div className="mt-4 sm:mt-5 w-full overflow-x-auto">
+        <div className="min-w-[600px]">
+          <DataTable
+            columns={columns}
+            data={filteredStudents}
+            pagination
+            responsive
+            highlightOnHover
+            striped
+            customStyles={{
+              table: { style: { minWidth: "100%" } },
+              rows: { style: { fontSize: "0.95rem" } },
+            }}
+          />
+        </div>
       </div>
     </div>
   );

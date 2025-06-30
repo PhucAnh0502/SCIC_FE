@@ -4,9 +4,9 @@ const DeviceInfo = ({ device }) => {
   if (!device) return <p>Không có thông tin thiết bị.</p>;
 
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 space-y-4">
-      <h2 className="text-xl font-semibold">Thông tin thiết bị</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+    <div className="bg-white shadow-lg rounded-xl p-4 sm:p-6 space-y-4">
+      <h2 className="text-lg sm:text-xl font-semibold text-blue-600 text-center">Thông tin thiết bị</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm sm:text-base">
         <div>
           <strong>ID:</strong>
           <p>{device.id?.id}</p>

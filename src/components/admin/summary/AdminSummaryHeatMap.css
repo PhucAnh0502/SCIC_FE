@@ -1,0 +1,65 @@
+.react-calendar-heatmap .react-calendar-heatmap-weekday-label {
+  font-size: 10px;
+  fill: #6b7280;
+  font-weight: 500;
+}
+.react-calendar-heatmap .react-calendar-heatmap-month-label {
+  font-size: 12px;
+  fill: #374151;
+  font-weight: 600;
+}
+.react-calendar-heatmap .color-empty {
+  fill: #e5e7eb;
+  cursor: pointer;
+}
+.react-calendar-heatmap .color-scale-1 {
+  fill: #fed7aa;
+  cursor: pointer;
+}
+.react-calendar-heatmap .color-scale-2 {
+  fill: #fb923c;
+  cursor: pointer;
+}
+.react-calendar-heatmap .color-scale-3 {
+  fill: #ea580c;
+  cursor: pointer;
+}
+.react-calendar-heatmap .color-scale-4 {
+  fill: #9a3412;
+  cursor: pointer;
+}
+.react-calendar-heatmap rect {
+  rx: 2;
+  ry: 2;
+  stroke: #fff;
+  stroke-width: 1;
+}
+.react-calendar-heatmap rect:hover {
+  stroke: #374151;
+  stroke-width: 2;
+  filter: brightness(1.1);
+}
+/* Custom tooltip styles */
+.heatmap-tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  white-space: nowrap;
+  transform: translate(-50%, -100%);
+  margin-top: -8px;
+}
+.heatmap-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -4px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}

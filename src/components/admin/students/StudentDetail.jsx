@@ -52,12 +52,12 @@ const StudentDetail = () => {
     );
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="flex justify-between items-center mb-4">
+    <div className="p-2 sm:p-4 md:p-6 max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition text-sm sm:text-base"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -73,27 +73,29 @@ const StudentDetail = () => {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Quay lại
+          <span className="hidden xs:inline">Quay lại</span>
         </button>
         {!editMode && (
           <button
             onClick={() => setEditMode(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm sm:text-base w-full sm:w-auto"
           >
             Chỉnh sửa
           </button>
         )}
       </div>
 
-      {editMode ? (
-        <StudentUpdateForm
-          student={student}
-          onSuccess={handleUpdateSuccess}
-          onCancel={() => setEditMode(false)}
-        />
-      ) : (
-        <StudentInfo student={student} />
-      )}
+      <div className="bg-white rounded-lg shadow-md p-3 sm:p-6">
+        {editMode ? (
+          <StudentUpdateForm
+            student={student}
+            onSuccess={handleUpdateSuccess}
+            onCancel={() => setEditMode(false)}
+          />
+        ) : (
+          <StudentInfo student={student} />
+        )}
+      </div>
     </div>
   );
 }

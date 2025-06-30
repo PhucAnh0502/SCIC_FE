@@ -59,13 +59,13 @@ function Login() {
       <h2 className="font-sevillana text-4xl text-white drop-shadow-md">
         Hệ thống quản lý vào ra
       </h2>
-      <div className="border shadow-lg rounded-lg p-6 w-96 bg-white">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">
+      <div className="border shadow-lg rounded-lg p-4 sm:p-6 w-full max-w-md bg-white">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-blue-600">
           Đăng nhập
         </h2>
         {error && <p className="text-red-500">{error}</p>}
         <form
-          className="rounded-lg border border-gray-200 p-6"
+          className="rounded-lg border border-gray-200 p-4 sm:p-6"
           onSubmit={handleSubmit}
         >
           <div className="mb-4">

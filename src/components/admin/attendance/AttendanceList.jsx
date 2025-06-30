@@ -103,9 +103,9 @@ const AttendanceList = () => {
       </div>
     );
   return (
-    <div className="p-5">
+    <div className="p-2 sm:p-4 md:p-8 bg-gray-50 min-h-screen">
       <div className="text-center">
-        <h3 className="text-2xl font-bold mb-5">Quản lý điểm danh</h3>
+        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">Quản lý điểm danh</h3>
       </div>
 
       <AttendanceListFilters
@@ -118,8 +118,10 @@ const AttendanceList = () => {
         handleAddAttendance={handleAddAttendance}
       />
 
-      <div className="mt-5">
-        <DataTable columns={columns} data={filteredAttendanceList} pagination />
+      <div className="mt-4 sm:mt-5 w-full overflow-x-auto">
+        <div className="min-w-[700px]">
+          <DataTable columns={columns} data={filteredAttendanceList} pagination responsive highlightOnHover striped />
+        </div>
       </div>
     </div>
   );

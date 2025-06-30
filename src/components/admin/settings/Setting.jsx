@@ -45,12 +45,12 @@ const Setting = () => {
     );
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg mt-10 space-y-6">
+    <div className="p-2 sm:p-4 md:p-6 max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto bg-white shadow-md rounded-lg mt-6 sm:mt-10 space-y-4 sm:space-y-6">
       <div>
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition font-medium"
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition font-medium text-sm sm:text-base"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@ const Setting = () => {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Quay lại
+          <span className="hidden xs:inline">Quay lại</span>
         </button>
       </div>
 
@@ -76,7 +76,7 @@ const Setting = () => {
 
       <div className="flex justify-center">
         <button
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium text-sm sm:text-base"
           onClick={() => navigate("/admin-dashboard/setting/change-password")}
         >
           Đổi mật khẩu

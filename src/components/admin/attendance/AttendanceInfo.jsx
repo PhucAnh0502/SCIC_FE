@@ -41,7 +41,7 @@ const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg space-y-6 mt-10 border border-gray-100">
+    <div className="max-w-3xl mx-auto bg-white p-4 sm:p-8 rounded-2xl shadow-lg space-y-6 mt-10 border border-gray-100">
       <h2 className="text-3xl font-bold text-blue-600 mb-4 text-center">
         📋 Chi tiết điểm danh
       </h2>
@@ -82,7 +82,7 @@ const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
           🎓 Sinh viên
         </h3>
         <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-left border border-gray-200 rounded-lg">
+          <table className="min-w-[600px] w-full text-sm text-left border border-gray-200 rounded-lg">
             <thead className="bg-gray-100 text-gray-700">
               <tr>
                 <th className="px-4 py-2 border">STT</th>

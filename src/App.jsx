@@ -25,6 +25,7 @@ import LecturerDetail from "./components/admin/lecturers/LecturerDetail";
 import AddLecturer from "./components/admin/lecturers/AddLecturer";
 import DeviceList from "./components/admin/devices/DeviceList";
 import DeviceDetail from "./components/admin/devices/DeviceDetail";
+import AdminSummary from "./components/admin/summary/AdminSummary";
 
 function App() {
   return (
@@ -47,6 +48,9 @@ function App() {
             </PrivateRoutes>
           }
         >
+          {/* Overview Dashboard */}
+          <Route index element={<AdminSummary />}></Route>
+
           {/* Users */}
           <Route
             path="/admin-dashboard/users"

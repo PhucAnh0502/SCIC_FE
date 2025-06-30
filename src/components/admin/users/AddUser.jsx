@@ -77,13 +77,13 @@ const AddUser = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen justify-center space-y-6 bg-gray-50">
-      <div className="border shadow-lg rounded-2xl p-8 w-full max-w-md bg-white relative">
+    <div className="flex flex-col items-center min-h-screen justify-center space-y-6 bg-gray-50">
+      <div className="border shadow-lg rounded-2xl p-4 sm:p-8 w-full max-w-md bg-white relative">
         <div className="flex items-center justify-between mb-6">
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition text-sm sm:text-base"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -99,9 +99,9 @@ const AddUser = () => {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            Quay lại
+            <span className="hidden xs:inline">Quay lại</span>
           </button>
-          <h2 className="text-2xl font-bold text-center text-blue-600 flex-1">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-blue-600 flex-1">
             Thêm người dùng
           </h2>
         </div>

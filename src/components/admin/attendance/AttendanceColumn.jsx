@@ -8,12 +8,12 @@ export const columns = [
     {
       name: "Tên giảng viên",
       selector: (row) => row.lecturerUserName,
-      width: "150px",
+      width: "140px",
     },
     {
       name: "Mã giảng viên",
       selector: (row) => row.lecturerCode,
-      width: "170px",
+      width: "140px",
     },
     {
       name: "Số lượng sinh viên",
