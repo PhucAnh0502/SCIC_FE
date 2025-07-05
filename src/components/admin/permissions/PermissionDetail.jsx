@@ -6,6 +6,7 @@ import { getBeToken } from "../../../config/token";
 import PermissionInfo from "./PermissionInfo";
 import UpdatePermission from "./UpdatePermission";
 import { getAllDevices, getAllUsers } from "../../../utils/AdminHelper";
+import { toast } from "react-toastify";
 
 const PermissionDetail = () => {
   const { permissionId } = useParams();
@@ -42,10 +43,11 @@ const PermissionDetail = () => {
         }
       );
       if (response.status === 200) {
+        toast.success("Lấy thông tin phân quyền thành công!");
         setPermissionInfo(response.data);
       }
     } catch (error) {
-      alert(
+      toast.error(
         error?.response?.data?.message || "không thể lấy thông tin phân quyền"
       );
     } finally {
@@ -61,6 +63,7 @@ const PermissionDetail = () => {
     setPermissionInfo(updatedPermission);
     setEditMode(false);
     fetchPermissionInfo();
+    toast.success("Cập nhật phân quyền thành công!");
   };
 
   if (loading)

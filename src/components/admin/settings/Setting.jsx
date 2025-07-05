@@ -4,6 +4,7 @@ import axios from "axios";
 import env from "../../../config/env";
 import UserInfo from "../users/UserInfo";
 import { getBeToken } from "../../../config/token.js";
+import { toast } from "react-toastify";
 
 const Setting = () => {
   const userId = sessionStorage.getItem("userId");
@@ -20,9 +21,12 @@ const Setting = () => {
           Authorization: `Bearer ${getBeToken()}`,
         },
       });
-      setUser(response.data);
+      if (response.status === 200) {
+        toast.success("Lấy thông tin người dùng thành công!");
+        setUser(response.data);
+      }
     } catch (err) {
-      alert(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
+      toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
     } finally {
       setLoading(false);
     }

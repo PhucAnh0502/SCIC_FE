@@ -2,12 +2,12 @@ import React, {useState} from 'react'
 import axios from 'axios';
 import env from "../../../config/env.js"
 import { getBeToken } from '../../../config/token.js';
+import { toast } from 'react-toastify';
 
 const StudentUpdateForm = ({ student, onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
     newStudentCode: student.studentCode || "",
   });
-  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,7 +16,6 @@ const StudentUpdateForm = ({ student, onSuccess, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
       const response = await axios.put(`${env.BE_API_PATH}/Admin/update-student/${student.userId}`, formData, {
@@ -26,13 +25,13 @@ const StudentUpdateForm = ({ student, onSuccess, onCancel }) => {
       });
       onSuccess(response.data.message);
     } catch (err) {
-      setError(err?.response?.data?.Message || "Cập nhật thất bại");
+      toast.error(err?.response?.data?.Message || "Cập nhật thất bại");
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md mx-auto">
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <h2 className="text-xl font-semibold mb-4">Cập nhật thông tin sinh viên</h2>
       <div>
         <label className="block font-medium mb-1 text-sm sm:text-base">Mã số sinh viên mới</label>
         <input

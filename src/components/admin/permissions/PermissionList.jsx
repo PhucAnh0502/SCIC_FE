@@ -5,6 +5,7 @@ import { columns } from './PermissionListColumn'
 import PermissionListActions from './PermissionListActions'
 import PermissionListFilters from './PermissionsListFilters'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const PermissionList = () => {
   const navigate = useNavigate()
@@ -40,7 +41,7 @@ const PermissionList = () => {
         setFilteredPermissions(data)
       }
     } catch (error) {
-      alert(error?.response?.data?.message || "Lỗi khi lấy danh sách phân quyền")
+      toast.error(error?.response?.data?.message || "Lỗi khi lấy danh sách phân quyền")
     } finally {
       setLoading(false)
     }

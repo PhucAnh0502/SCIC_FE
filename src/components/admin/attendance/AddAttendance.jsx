@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import env from "../../../config/env";
 import { getBeToken } from "../../../config/token";
+import { toast } from "react-toastify";
 
 const AddAttendance = () => {
   const navigate = useNavigate();
@@ -51,11 +52,11 @@ const AddAttendance = () => {
         }
       );
       if (response.status === 200) {
-        alert("Tạo danh sách điêm danh thành công!");
+        toast.success("Tạo danh sách điêm danh thành công!");
         navigate("/admin-dashboard/attendances");
       }
     } catch (error) {
-      alert(
+      toast.error(
         error?.response?.data?.message || "Có lỗi khi thêm danh sách điểm danh"
       );
     }

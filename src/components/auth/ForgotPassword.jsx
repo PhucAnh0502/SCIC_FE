@@ -2,35 +2,31 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import env from "../../config/env.js";
+import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
-    setError("");
 
     try {
       const encodedEmail = encodeURIComponent(email);
-      const encodedPassword = encodeURIComponent(newPassword)
+      const encodedPassword = encodeURIComponent(newPassword);
       const response = await axios.put(
-        `${
-          env.BE_API_PATH
-        }/Auth/forgot-password/${encodedEmail}?newPassword=${encodedPassword}`
+        `${env.BE_API_PATH}/Auth/forgot-password/${encodedEmail}?newPassword=${encodedPassword}`
       );
-      setMessage(response.data.message || "Đổi mật khẩu thành công");
-      setTimeout(() => {
-        navigate("/login")
-      }, 2000)
-      
+      if (response.status === 200) {
+        toast.success(response.data.message || "Đổi mật khẩu thành công");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      }
     } catch (error) {
-      setError(
+      toast.error(
         error?.response?.data?.Message || "Có lỗi xảy ra khi đổi mật khẩu"
       );
     }
@@ -42,8 +38,6 @@ const ForgotPassword = () => {
         <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-blue-600">
           Quên mật khẩu
         </h2>
-        {message && <p className="text-green-500">{message}</p>}
-        {error && <p className="text-red-500">{error}</p>}
         <form
           className="rounded-lg border border-gray-200 p-4 sm:p-6"
           onSubmit={handleSubmit}

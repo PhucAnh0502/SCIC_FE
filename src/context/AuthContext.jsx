@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import env from "../config/env.js";
+import { toast } from "react-toastify";
 
 const userContext = createContext();
 
@@ -23,6 +24,7 @@ function AuthContext({ children }) {
           }
         );
         if (response.status === 200) {
+          toast.success("Xác thực người dùng thành công!");
           setUser(response.data);
           setLoading(false);
         }
@@ -31,6 +33,9 @@ function AuthContext({ children }) {
         setLoading(false);
       }
     } catch (error) {
+      toast.error(
+        error.response?.data?.Message || "Xác thực người dùng thất bại. Vui lòng đăng nhập lại."
+      );
       if (error.response?.data) {
         setUser(null);
       }
@@ -49,6 +54,7 @@ function AuthContext({ children }) {
 
   const login = async () => {
     await verifyUser()
+    toast.success("Đăng nhập thành công!");
   };
 
   const logout = () => {
@@ -56,6 +62,7 @@ function AuthContext({ children }) {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("role");
+    toast.info("Đăng xuất thành công!");
   };
 
   return (

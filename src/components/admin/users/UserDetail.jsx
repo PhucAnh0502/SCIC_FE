@@ -5,6 +5,7 @@ import UserInfo from "./UserInfo";
 import UserUpdateForm from "./UserUpdateForm";
 import env from "../../../config/env.js";
 import { getBeToken } from "../../../config/token.js";
+import { toast } from "react-toastify";
 
 const UserDetail = () => {
   const { userId } = useParams();
@@ -21,9 +22,12 @@ const UserDetail = () => {
           Authorization: `Bearer ${getBeToken()}`,
         },
       });
-      setUser(response.data);
+      if (response.status === 200) {
+        toast.success("Lấy thông tin người dùng thành công!");
+        setUser(response.data);
+      }
     } catch (err) {
-      alert(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
+      toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
     } finally {
       setLoading(false);
     }
@@ -37,6 +41,7 @@ const UserDetail = () => {
     setUser(updatedUser);
     setEditMode(false);
     fetchUser();
+    toast.success("Cập nhật thông tin thành công!");
   };
 
   if (loading)

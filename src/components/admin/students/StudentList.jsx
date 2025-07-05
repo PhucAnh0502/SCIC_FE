@@ -5,6 +5,7 @@ import DataTable from "react-data-table-component";
 import { columns } from "./StudentColumn";
 import StudentListFilters from "./StudentListFilters";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const StudentList = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const StudentList = () => {
         setFilteredStudents(data);
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to fetch students");
+      toast.error(err.response?.data?.message || "Không thể lấy dữ liệu sinh viên");
     } finally {
       setLoading(false);
     }

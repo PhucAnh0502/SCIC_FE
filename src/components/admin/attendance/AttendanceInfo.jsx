@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import env from "../../../config/env.js";
 import { getBeToken } from "../../../config/token.js";
+import { toast } from "react-toastify";
 
 const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
   if (!attendanceInfo)
@@ -23,7 +24,7 @@ const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
         }
       );
       if (response.status === 200) {
-        alert("Cập nhật trạng thái thành công");
+        toast.success("Cập nhật trạng thái thành công");
 
         const updatedStudents = attendanceInfo.student.$values.map((s) =>
           s.student.userId === studentId ? { ...s, isAttended: true } : s
@@ -35,8 +36,7 @@ const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
         });
       }
     } catch (error) {
-      console.log(error)
-      alert(error.response?.data?.message || "Thay đổi trạng thái thất bại");
+      toast.error(error.response?.data?.message || "Thay đổi trạng thái thất bại");
     }
   };
 

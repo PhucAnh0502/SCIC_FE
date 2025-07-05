@@ -5,6 +5,7 @@ import { columns } from "./AttendanceColumn";
 import DataTable from "react-data-table-component";
 import AttendanceListFilters from "./AttendanceListFilters";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AttendanceList = () => {
   const navigate = useNavigate();
@@ -47,8 +48,7 @@ const AttendanceList = () => {
         setFilteredAttendanceList(data);
       }
     } catch (error) {
-      console.log(error);
-      alert(
+      toast.error(
         error?.response?.data?.Message ||
           "Có lỗi xảy ra khi lấy thông tin điểm danh"
       );

@@ -5,6 +5,7 @@ import env from '../../../config/env';
 import StudentUpdateForm from './StudentUpdateForm';
 import StudentInfo from './StudentInfo';
 import { getBeToken } from '../../../config/token.js';
+import { toast } from 'react-toastify';
 
 const StudentDetail = () => {
   const { userId } = useParams();
@@ -21,9 +22,12 @@ const StudentDetail = () => {
           Authorization: `Bearer ${getBeToken()}`,
         },
       });
-      setStudent(response.data);
+      if (response.status === 200) {
+        toast.success("Lấy thông tin sinh viên thành công!");
+        setStudent(response.data);
+      }
     } catch (err) {
-      alert(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
+      toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
     } finally {
       setLoading(false);
     }

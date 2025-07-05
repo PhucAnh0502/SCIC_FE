@@ -5,6 +5,7 @@ import { columns } from "./LecturerColumn";
 import { useNavigate } from "react-router-dom";
 import LecturerListFilters from "./LecturerListFilters";
 import LecturerListActions from "./LecturerListActions";
+import { toast } from "react-toastify";
 
 const LecturerList = () => {
   const navigate = useNavigate();
@@ -17,6 +18,10 @@ const LecturerList = () => {
   const onLecturerRefresh = () => {
     fetchLecturers();
   };
+
+  useEffect(() => {
+    fetchLecturers();
+  }, []);
 
   const fetchLecturers = async () => {
     setLoading(true);
@@ -42,16 +47,11 @@ const LecturerList = () => {
         setFilteredLecturers(data);
       }
     } catch (err) {
-       console.log(err) 
-      alert(err.response?.data?.message || "Failed to fetch lecturers");
+      toast.error(err.response?.data?.message || "Không thể lấy dữ liệu giảng viên");
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchLecturers();
-  }, []);
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);

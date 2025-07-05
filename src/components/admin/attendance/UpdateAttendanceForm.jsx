@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import env from "../../../config/env";
 import { getBeToken } from "../../../config/token.js";
+import { toast } from "react-toastify";
 
 const UpdateAttendanceForm = ({ attendance, onSuccess, onCancel, lecturers, students, devices }) => {
-  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     lecturerId: attendance.lecturer.userId,
     studentIds: attendance.student.$values.map(
@@ -15,7 +15,6 @@ const UpdateAttendanceForm = ({ attendance, onSuccess, onCancel, lecturers, stud
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     console.log(formData)
 
     try {
@@ -30,13 +29,12 @@ const UpdateAttendanceForm = ({ attendance, onSuccess, onCancel, lecturers, stud
       );
       onSuccess(response.data.message);
     } catch (err) {
-      console.log(err)
-      setError(err?.response?.data?.message || "Cập nhật thất bại");
+      toast.error(err?.response?.data?.message || "Cập nhật thất bại");
     }
   };
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <h2 className="text-xl font-semibold mb-4">Cập nhật thông tin điểm danh</h2>
       <div>
         <label className="block text-sm font-medium mb-2">Chọn giảng viên</label>
         <select

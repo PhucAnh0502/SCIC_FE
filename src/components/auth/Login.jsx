@@ -5,16 +5,15 @@ import { useNavigate } from "react-router-dom";
 import env from "../../config/env.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { loginToTB } from "../../utils/LoginToThingsBoard.jsx";
+import { toast } from "react-toastify";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
   const { login } = useAuth();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
       const response = await axios.post(`${env.BE_API_PATH}/Auth/login`, {
@@ -27,7 +26,7 @@ function Login() {
         const role = roles?.$values?.[0]?.toLowerCase();
 
         if (!role) {
-          setError("Không xác định vai trò người dùng.");
+          toast.error("Không xác định vai trò người dùng.");
           return;
         }
 
@@ -45,12 +44,10 @@ function Login() {
         navigate(`/${role}-dashboard`);
       }
     } catch (err) {
-      if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("Có lỗi xảy ra. Vui lòng thử lại.");
-        console.error(err);
-      }
+      console.log(err);
+      toast.error(
+        err?.response?.data?.message || "Đăng nhập thất bại. Vui lòng thử lại."
+      );
     }
   };
 
@@ -63,7 +60,6 @@ function Login() {
         <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-blue-600">
           Đăng nhập
         </h2>
-        {error && <p className="text-red-500">{error}</p>}
         <form
           className="rounded-lg border border-gray-200 p-4 sm:p-6"
           onSubmit={handleSubmit}

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { convertToBase64 } from "../../utils/ImageHelper";
 import env from "../../config/env.js";
+import { toast } from "react-toastify";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -15,7 +16,6 @@ function Register() {
     fingerprintImage: "",
   });
   const [error, setError] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,7 +30,6 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    setSuccessMsg("");
 
     if (!formData.faceImage || !formData.fingerprintImage) {
       setError("Vui lòng chọn ảnh khuôn mặt và ảnh vân tay.");
@@ -61,12 +60,11 @@ function Register() {
       });
 
       if (response.status === 200) {
-        setSuccessMsg("Đăng ký thành công!");
+        toast.success("Đăng ký thành công!");
         setTimeout(() => navigate("/login"), 2000);
       }
     } catch (err) {
-      console.error(err.response?.data || err.message);
-      setError(err.response?.data.message || "Đăng ký thất bại");
+      toast.error(err.response?.data.message || "Đăng ký thất bại");
     }
   };
 
@@ -77,7 +75,6 @@ function Register() {
           Đăng ký
         </h2>
         {error && <p className="text-red-500">{error}</p>}
-        {successMsg && <p className="text-green-600">{successMsg}</p>}
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           {[

@@ -1,6 +1,7 @@
 import axios from "axios";
 import env from "../config/env.js";
 import { getBeToken, getTbToken } from "../config/token.js";
+import { toast } from "react-toastify";
 
 export const getAllUsers = async () => {
   let users;
@@ -12,9 +13,10 @@ export const getAllUsers = async () => {
     });
     if (response.status === 200) {
       users = response.data.$values;
+      toast.success("Lấy danh sách người dùng thành công!");
     }
   } catch (err) {
-    alert(err.response.data.Message || "Không thể lấy danh sách người dùng");
+    toast.error(err.response?.data?.Message || "Không thể lấy danh sách người dùng");
   }
   return users;
 };
@@ -32,9 +34,10 @@ export const getDefaultUsers = async () => {
     );
     if (response.status === 200) {
       defaultUsers = response.data.$values;
+      toast.success("Lấy thông tin người dùng mặc định thành công!");
     }
   } catch (err) {
-    alert(err.response.data.Message || "Không thể lấy thông tin người dùng");
+    toast.error(err.response?.data?.Message || "Không thể lấy thông tin người dùng");
   }
   return defaultUsers;
 };
@@ -49,9 +52,10 @@ export const getAllStudents = async () => {
     });
     if (response.status === 200) {
       users = response.data.$values;
+      toast.success("Lấy danh sách sinh viên thành công!");
     }
   } catch (err) {
-    alert(err.response.data.Message || "Không thể lấy danh sách sinh viên");
+    toast.error(err.response?.data?.Message || "Không thể lấy danh sách sinh viên");
   }
   return users;
 };
@@ -66,9 +70,10 @@ export const getAllLecturers = async () => {
     });
     if (response.status === 200) {
       lecturers = response.data.$values;
+      toast.success("Lấy danh sách giảng viên thành công!");
     }
   } catch (err) {
-    alert(err.response.data.Message || "Không thể lấy danh sách giảng viên");
+    toast.error(err.response?.data?.Message || "Không thể lấy danh sách giảng viên");
   }
   return lecturers;
 };
@@ -86,11 +91,12 @@ export const getAttendancesList = async () => {
     );
     if (response.status === 200) {
       attendanceList = response.data.$values;
+      toast.success("Lấy danh sách điểm danh thành công!");
     } else {
       return [];
     }
   } catch (err) {
-    alert(err.response.data.Message || "Không thể lấy danh sách điểm danh");
+    toast.error(err.response?.data?.Message || "Không thể lấy danh sách điểm danh");
   }
   return attendanceList;
 };
@@ -110,11 +116,12 @@ export const getAllDevices = async (pageSize, page) => {
     );
     if (response.status === 200) {
       deviceList = response.data.data;
+      toast.success("Lấy danh sách thiết bị thành công!");
     } else {
       return [];
     }
   } catch (err) {
-    alert(err.response.data.message || "Không thể lấy danh sách thiết bị");
+    toast.error(err.response?.data?.message || "Không thể lấy danh sách thiết bị");
   }
   return deviceList;
 };
@@ -128,12 +135,13 @@ export const getDeviceById = async (deviceId) => {
       }
     })
     if(response.status === 200){
-      device = response.data
+      device = response.data;
+      toast.success("Lấy thông tin thiết bị thành công!");
     } else {
       return {}
     }
   } catch (error) {
-    alert(error.response.data.message || "Không thể lấy thông tin thiết bị")
+    toast.error(error.response?.data?.message || "Không thể lấy thông tin thiết bị")
   }
   return device
 }
@@ -151,11 +159,12 @@ export const getAllPermissions = async () => {
     );
     if (response.status === 200) {
       permissions = response.data.$values;
+      toast.success("Lấy danh sách phân quyền thành công!");
     } else {
       return [];
     }
   } catch (error) {
-    alert(error.response.data.message || "Không thể lấy thông tin phân quyền");
+    toast.error(error.response?.data?.message || "Không thể lấy thông tin phân quyền");
   }
   return permissions;
 };

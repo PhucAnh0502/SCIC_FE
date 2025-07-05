@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import DeviceListFilters from "./DeviceListFilter";
 import { columns } from "./DeviceColumn";
 import DeviceListActions from "./DeviceListActions";
+import { toast } from "react-toastify";
 //import { useNavigate } from "react-router-dom";
 
 const DeviceList = () => {
@@ -37,8 +38,7 @@ const DeviceList = () => {
         setFilteredDevices(data);
       }
     } catch (err) {
-       console.log(err) 
-      alert(err.response?.data?.message || "Failed to fetch devices");
+      toast.error(err.response?.data?.message || "Không thể lấy danh sách thiết bị.");
     } finally {
       setLoading(false);
     }

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import env from "../../../config/env";
 import { getBeToken } from "../../../config/token";
+import { toast } from "react-toastify";
 
 const CreatePermission = () => {
   const navigate = useNavigate();
@@ -53,11 +54,11 @@ const CreatePermission = () => {
         }
       );
       if (response.status === 200) {
-        alert("Phân quyền thành công!");
+        toast.success("Phân quyền thành công!");
         navigate("/admin-dashboard/permissions");
       }
     } catch (error) {
-      alert(error?.response?.data?.message || "Có lỗi khi phân quyền");
+      toast.error(error?.response?.data?.message || "Có lỗi khi phân quyền");
     }
   };
 

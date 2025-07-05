@@ -11,6 +11,7 @@ import {
   getAllDevices,
   getDeviceById,
 } from "../../../utils/AdminHelper";
+import { toast } from "react-toastify";
 
 const AttendanceDetail = () => {
   const { attendanceId } = useParams();
@@ -59,7 +60,7 @@ const AttendanceDetail = () => {
         }
       }
     } catch (error) {
-      alert(
+      toast.error(
         error?.response?.data?.message || "không thể lấy thông tin điểm danh"
       );
     } finally {
@@ -75,6 +76,7 @@ const AttendanceDetail = () => {
     setAttendanceInfo(updatedAttendance);
     setEditMode(false);
     fetchAttendanceInfo();
+    toast.success("Cập nhật thông tin điểm danh thành công!");
   };
 
   if (loading)

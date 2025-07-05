@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import env from "../../../config/env.js";
 import { getBeToken } from "../../../config/token.js";
+import { toast } from "react-toastify";
 
 const AddLecturer = () => {
   const [loading, setLoading] = useState(false);
@@ -25,7 +26,7 @@ const AddLecturer = () => {
       const defaultUsers = await getDefaultUsers();
       setDefaultUsers(defaultUsers);
     } catch (err) {
-      alert(err.response?.data?.message || "Không thể lấy dữ liệu người dùng");
+      toast.error(err.response?.data?.message || "Không thể lấy dữ liệu người dùng");
     } finally {
       setLoading(false);
     }
@@ -39,7 +40,7 @@ const AddLecturer = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${env.BE_API_PATH}/Admin/create-student/${selectedUserId}`,
+        `${env.BE_API_PATH}/Admin/create-lecturer/${selectedUserId}`,
         {
           lecturerCode,
           hireDate,
@@ -51,11 +52,11 @@ const AddLecturer = () => {
         }
       );
       if (response) {
-        alert(response.data.message);
+        toast.success(response.data.message);
         navigate(-1);
       }
     } catch (error) {
-      alert(error.response?.data?.Message || "Đăng ký thất bại");
+      toast.error(error.response?.data?.Message || "Đăng ký thất bại");
     }
   };
 

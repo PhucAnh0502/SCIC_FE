@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import env from "../../config/env";
 import { useNavigate } from "react-router-dom";
 import { getBeToken } from "../../config/token.js";
+import { toast } from "react-toastify";
 
 const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate()
@@ -15,7 +15,6 @@ const ChangePassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setMessage("");
 
     if (newPassword !== confirmPassword) {
       setError("New password and confirm password must be the same");
@@ -33,14 +32,14 @@ const ChangePassword = () => {
           },
         }
       );
-      if (response) {
-        setMessage(response.data.message || "Đổi mật khẩu thành công");
+      if (response.status === 200) {
+        toast.success(response.data.message || "Đổi mật khẩu thành công");
         setTimeout(() => {
           navigate(-1)
         },2000)
       }
     } catch (error) {
-      setError(
+      toast.error(
         error?.response?.data?.Message || "Có lỗi xảy ra khi đổi mật khẩu"
       );
     }
@@ -51,7 +50,6 @@ const ChangePassword = () => {
         <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-blue-600">
           Đổi mật khẩu
         </h2>
-        {message && <p className="text-green-500">{message}</p>}
         {error && <p className="text-red-500">{error}</p>}
         <form
           className="rounded-lg border border-gray-200 p-4 sm:p-6"

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import env from "../../../config/env";
 import { getBeToken } from "../../../config/token.js";
+import { toast } from "react-toastify";
 
 const UpdatePermission = ({
   permission,
@@ -10,7 +11,6 @@ const UpdatePermission = ({
   users,
   devices,
 }) => {
-  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     userIds: permission.users.$values.map((user) => user.id),
     deviceIds: permission.deviceIds.$values,
@@ -20,7 +20,6 @@ const UpdatePermission = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     try {
       const response = await axios.put(
         `${env.BE_API_PATH}/Permission/update-permission/${permission.id}`,
@@ -33,13 +32,13 @@ const UpdatePermission = ({
       );
       onSuccess(response.data.message);
     } catch (err) {
-      setError(err?.response?.data?.message || "Cập nhật thất bại");
+      toast.error(err?.response?.data?.message || "Cập nhật thất bại");
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <h2 className="text-xl font-semibold mb-4">Cập nhật phân quyền</h2>
       <div>
         <label className="block text-sm font-medium mb-2">
           Chọn người dùng

@@ -5,6 +5,7 @@ import { columns } from "./UserColumn";
 import DataTable from "react-data-table-component";
 import UserListActions from "./UserListActions";
 import UserListFilters from "./UserListFilters";
+import { toast } from "react-toastify";
 
 const UserList = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const UserList = () => {
         setFilteredUsers(data);
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to fetch users");
+      toast.error(err.response?.data?.message || "Không thể lấy dữ liệu người dùng");
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,7 @@ import env from '../../../config/env';
 import { getBeToken } from '../../../config/token.js';
 import LecturerInfo from './LecturerInfo.jsx';
 import LecturerUpdateForm from './LecturerUpdateForm.jsx';
+import { toast } from 'react-toastify';
 
 const LecturerDetail = () => {
   const { userId } = useParams();
@@ -21,9 +22,12 @@ const LecturerDetail = () => {
           Authorization: `Bearer ${getBeToken()}`,
         },
       });
-      setLecturer(response.data);
+      if (response.status === 200) {
+        toast.success("Lấy thông tin giảng viên thành công!");
+        setLecturer(response.data);
+      }
     } catch (err) {
-      alert(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
+      toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
     } finally {
       setLoading(false);
     }
@@ -37,6 +41,7 @@ const LecturerDetail = () => {
     setLecturer(updatedLecturer);
     setEditMode(false);
     fetchLecturer();
+    toast.success("Cập nhật thông tin giảng viên thành công!");
   };
 
   if (loading)

@@ -1,5 +1,6 @@
 import axios from "axios"
 import env from "../config/env"
+import { toast } from "react-toastify"
 
 export const loginToTB = async () => {
     try {
@@ -11,6 +12,6 @@ export const loginToTB = async () => {
             return response.data.token
         }
     } catch (error) {
-        alert(error.response.data.message)
+        toast.error(error.response.data.message)
     }
 }

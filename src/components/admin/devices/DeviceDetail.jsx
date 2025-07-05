@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 // import { getBeToken } from '../../../config/token.js';
 import { getDeviceById } from '../../../utils/AdminHelper.jsx';
 import DeviceInfo from './DeviceInfo.jsx';
+import { toast } from 'react-toastify';
 
 const DeviceDetail = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const DeviceDetail = () => {
       const response = await getDeviceById(id)
       setDevices(response);
     } catch (err) {
-      alert(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
+      toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
     } finally {
       setLoading(false);
     }

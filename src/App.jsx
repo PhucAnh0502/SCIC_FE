@@ -26,6 +26,8 @@ import AddLecturer from "./components/admin/lecturers/AddLecturer";
 import DeviceList from "./components/admin/devices/DeviceList";
 import DeviceDetail from "./components/admin/devices/DeviceDetail";
 import AdminSummary from "./components/admin/summary/AdminSummary";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -147,6 +149,7 @@ function App() {
           />
         </Route>
       </Routes>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick pauseOnHover />
     </BrowserRouter>
   );
 }
