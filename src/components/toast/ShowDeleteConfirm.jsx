@@ -26,7 +26,7 @@ const ShowDeleteConfirm = ({ onConfirm, message = "Bạn chắc chắn muốn x�
           </div>
         </div>
       ),
-      { autoClose: false, closeOnClick: false, position: toast.POSITION.TOP_CENTER }
+      { autoClose: false, closeOnClick: false, position: "top-center" }
     );
   };
 
