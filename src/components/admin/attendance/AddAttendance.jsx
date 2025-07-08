@@ -179,7 +179,7 @@ const AddAttendance = () => {
           </option>
           {devices.map((device) => (
             <option key={device.id.id} value={device.id.id}>
-              {device.label || "(N/A)"}
+              {(device.label || "(N/A)") + " - " + (device.active ? "Hoạt động" : "Không hoạt động")}
             </option>
           ))}
         </select>
@@ -188,7 +188,7 @@ const AddAttendance = () => {
         <div className="w-full sm:w-1/2">
           <label className="block text-sm font-medium">Ngày bắt đầu</label>
           <input
-            type="date"
+            type="datetime-local"
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             value={formData.timeStart}
             onChange={(e) =>
@@ -200,7 +200,7 @@ const AddAttendance = () => {
         <div className="w-full sm:w-1/2">
           <label className="block text-sm font-medium">Ngày kết thúc</label>
           <input
-            type="date"
+            type="datetime-local"
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             value={formData.timeEnd}
             onChange={(e) =>
