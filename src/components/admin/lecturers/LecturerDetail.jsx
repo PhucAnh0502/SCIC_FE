@@ -82,17 +82,15 @@ const LecturerDetail = () => {
         )}
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-3 sm:p-6">
-        {editMode ? (
-          <LecturerUpdateForm
-            lecturer={lecturer}
-            onSuccess={handleUpdateSuccess}
-            onCancel={() => setEditMode(false)}
-          />
-        ) : (
-          <LecturerInfo lecturer={lecturer} />
-        )}
-      </div>
+      {editMode ? (
+        <LecturerUpdateForm
+          lecturer={lecturer}
+          onSuccess={handleUpdateSuccess}
+          onCancel={() => setEditMode(false)}
+        />
+      ) : (
+        <LecturerInfo lecturer={lecturer} />
+      )}
     </div>
   );
 };

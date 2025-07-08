@@ -81,17 +81,15 @@ const StudentDetail = () => {
         )}
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-3 sm:p-6">
-        {editMode ? (
-          <StudentUpdateForm
-            student={student}
-            onSuccess={handleUpdateSuccess}
-            onCancel={() => setEditMode(false)}
-          />
-        ) : (
-          <StudentInfo student={student} />
-        )}
-      </div>
+      {editMode ? (
+        <StudentUpdateForm
+          student={student}
+          onSuccess={handleUpdateSuccess}
+          onCancel={() => setEditMode(false)}
+        />
+      ) : (
+        <StudentInfo student={student} />
+      )}
     </div>
   );
 };

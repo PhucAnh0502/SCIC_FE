@@ -1,22 +1,54 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { beInstance } from "../../../config/axios";
 import { toast } from "react-toastify";
+import {
+  startSignalRConnection,
+  stopSignalRConnection,
+} from "../../../config/socket";
 
 const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
+  useEffect(() => {
+    const handleTelemetry = async (message) => {
+      try {
+        const data = JSON.parse(message);
+        const deviceId = data?.data?.data?.DeviceId?.[0]?.[1];
+        const studentId = data?.data?.data?.StudentId?.[0]?.[1];
+
+        if (deviceId && studentId) {
+          console.log("Nhận dữ liệu từ thiết bị:", data);
+          await handleAttend(deviceId, studentId);
+        }
+      } catch (error) {
+        console.error("Lỗi khi xử lý dữ liệu từ socket:", error);
+        toast.error("Lỗi khi nhận dữ liệu từ thiết bị");
+      }
+    };
+
+    startSignalRConnection(handleTelemetry);
+
+    return () => {
+      stopSignalRConnection();
+    };
+  }, []);
+
   if (!attendanceInfo)
     return (
       <div className="text-center text-gray-500 mt-10">Không có dữ liệu</div>
     );
 
-  const { lecturer, student, deviceId, timeStart, timeEnd, createdAt } = attendanceInfo;
+  const { lecturer, student, deviceId, timeStart, timeEnd, createdAt } =
+    attendanceInfo;
 
   const handleAttend = async (deviceId, studentId) => {
     try {
+      const response = await beInstance.get(`/User/${studentId}`);
+      const studentName = response?.fullName || "Sinh viên";
+
       await beInstance.put(
         `/Attendance/update-student-attendance/${deviceId}/${studentId}`
       );
 
-      toast.success("Cập nhật trạng thái thành công");
+      toast.success(`${studentName} đã điểm danh thành công`);
 
       const updatedStudents = attendanceInfo.student.$values.map((s) =>
         s.student.userId === studentId ? { ...s, isAttended: true } : s
@@ -27,8 +59,8 @@ const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
         student: { $values: updatedStudents },
       });
     } catch (error) {
-      console.log(error)
-      toast.error(error?.details || "Thay đổi trạng thái thất bại");
+      console.error(error);
+      toast.error("Thay đổi trạng thái thất bại");
     }
   };
 
@@ -104,9 +136,7 @@ const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
                     ) : (
                       <span
                         className="text-red-600 font-medium cursor-pointer"
-                        onClick={() =>
-                          handleAttend(deviceId, s.student.userId)
-                        }
+                        onClick={() => handleAttend(deviceId, s.student.userId)}
                       >
                         ❌ Vắng
                       </span>
