@@ -55,15 +55,11 @@ const DeviceInfo = ({ device }) => {
         </div>
         <div>
           <strong>Cấu hình:</strong>
-          <pre className="bg-gray-100 p-2 rounded">
-            {JSON.stringify(device.deviceData?.configuration, null, 2)}
-          </pre>
+          <p>{device.deviceData?.configuration.type}</p>
         </div>
         <div>
           <strong>Cấu hình truyền:</strong>
-          <pre className="bg-gray-100 p-2 rounded">
-            {JSON.stringify(device.deviceData?.transportConfiguration, null, 2)}
-          </pre>
+          <p>{device.deviceData?.transportConfiguration.type}</p>
         </div>
       </div>
     </div>
