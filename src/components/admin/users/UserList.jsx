@@ -65,11 +65,11 @@ const UserList = () => {
   };
 
   const filterUsers = (search, role) => {
-  const data = users.filter((user) => {
+  const data = users.filter((user) => { 
     const matchesSearch = user.fullName
       .toLowerCase()
       .includes(search.toLowerCase());
-    const roleNames = user.userRoles?.map((r) => r.roleName) || []; 
+    const roleNames = user.userRoles || []; 
     const matchesRole = role === "" || roleNames.includes(role);
     return matchesSearch && matchesRole;
   });

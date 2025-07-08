@@ -1,8 +1,6 @@
-import axios from "axios";
+import { beInstance } from "../../../config/axios.js";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import env from "../../../config/env";
-import { getBeToken } from "../../../config/token.js";
 import AttendanceInfo from "./AttendanceInfo";
 import UpdateAttendanceForm from "./UpdateAttendanceForm";
 import {
@@ -43,21 +41,15 @@ const AttendanceDetail = () => {
   const fetchAttendanceInfo = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `${env.BE_API_PATH}/Attendance/attendance/${attendanceId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
+      const response = await beInstance.get(
+        `/Attendance/attendance/${attendanceId}`
       );
-      if (response.status === 200) {
-        const info = response.data;
-        setAttendanceInfo(info);
-        const data = await getDeviceById(info.deviceId); 
-        if (data) {
-          setDeviceInfo(data);
-        }
+
+      const info = response;
+      setAttendanceInfo(info);
+      const data = await getDeviceById(info.deviceId);
+      if (data) {
+        setDeviceInfo(data);
       }
     } catch (error) {
       toast.error(

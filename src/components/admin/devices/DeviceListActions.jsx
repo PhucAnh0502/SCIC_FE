@@ -1,8 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaTrash } from "react-icons/fa";
-import axios from "axios";
-import env from "../../../config/env";
+import { beInstance } from "../../../config/axios";
 import { toast } from "react-toastify";
 import ShowDeleteConfirm from "../../toast/ShowDeleteConfirm";
 
@@ -12,18 +11,9 @@ const DeviceListActions = ({ id, onDeviceRefresh }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${env.BE_API_PATH}/Device/delete-device/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        toast.success("Xóa thiết bị thành công!");
-        if (onDeviceRefresh) onDeviceRefresh();
-      }
+      await beInstance.delete(`/Device/delete-device/${id}`);
+      toast.success("Xóa thiết bị thành công!");
+      if (onDeviceRefresh) onDeviceRefresh();
     } catch (error) {
       toast.error(
         error?.response?.data?.Message || "Có lỗi xảy ra khi xóa thiết bị"

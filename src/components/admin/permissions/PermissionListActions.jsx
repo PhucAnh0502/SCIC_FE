@@ -1,9 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { FaEye, FaTrash } from "react-icons/fa";
-import env from "../../../config/env.js";
 import { toast } from "react-toastify";
+import { beInstance } from "../../../config/axios";
 import ShowDeleteConfirm from "../../toast/ShowDeleteConfirm";
 
 const PermissionListActions = ({ id, onPermissionRefresh }) => {
@@ -12,19 +11,9 @@ const PermissionListActions = ({ id, onPermissionRefresh }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${env.BE_API_PATH}/Permission/delete-permission/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        toast.success("Xóa phân quyền thành công!");
-        onPermissionRefresh();
-      }
+      await beInstance.delete(`/Permission/delete-permission/${id}`);
+      toast.success("Xóa phân quyền thành công!");
+      onPermissionRefresh();
     } catch (error) {
       toast.error(
         error?.response?.data?.message || "Có lỗi xảy ra khi xóa phân quyền"

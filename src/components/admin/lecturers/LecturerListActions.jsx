@@ -1,9 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { beInstance } from "../../../config/axios.js";
 import { FaEye, FaTrash } from "react-icons/fa";
-import env from "../../../config/env.js";
-import { getBeToken } from "../../../config/token.js";
 import { toast } from "react-toastify";
 import ShowDeleteConfirm from "../../toast/ShowDeleteConfirm";
 
@@ -13,23 +11,12 @@ const LecturerListActions = ({ id, onLecturerRefresh }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${env.BE_API_PATH}/Admin/delete-leturer/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
-      );
+      await beInstance.delete(`/Admin/delete-leturer/${id}`);
 
-      if (response.data) {
-        toast.success("Xóa giảng viên thành công!");
-        onLecturerRefresh();
-      }
+      toast.success("Xóa giảng viên thành công!");
+      onLecturerRefresh();
     } catch (err) {
-      toast.error(
-        err.response?.Message || "Có lỗi xảy ra khi xóa giảng viên"
-      );
+      toast.error(err.response?.Message || "Có lỗi xảy ra khi xóa giảng viên");
     }
   };
 

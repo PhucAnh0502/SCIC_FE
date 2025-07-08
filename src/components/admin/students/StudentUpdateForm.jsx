@@ -1,45 +1,49 @@
-import React, {useState} from 'react'
-import axios from 'axios';
-import env from "../../../config/env.js"
-import { getBeToken } from '../../../config/token.js';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { beInstance } from "../../../config/axios";
 
 const StudentUpdateForm = ({ student, onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
-    newStudentCode: student.studentCode || "",
+    studentCode: student.studentCode || "",
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, studentCode: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.put(`${env.BE_API_PATH}/Admin/update-student/${student.userId}`, formData, {
-        headers: {
-          "Authorization": `Bearer ${getBeToken()}`,
-        },
-      });
-      onSuccess(response.data.message);
+      const response = await beInstance.put(
+        `/Admin/update-student/${student.userId}`,
+        formData
+      );
+      toast.success(response.data?.message || "Cập nhật thành công");
+      onSuccess(response.data);
     } catch (err) {
-      toast.error(err?.response?.data?.Message || "Cập nhật thất bại");
+      toast.error(
+        err?.response?.data?.message ||
+        err?.response?.data?.Message ||
+        "Cập nhật thất bại"
+      );
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md mx-auto">
       <h2 className="text-xl font-semibold mb-4">Cập nhật thông tin sinh viên</h2>
+
       <div>
-        <label className="block font-medium mb-1 text-sm sm:text-base">Mã số sinh viên mới</label>
+        <label className="block font-medium mb-1 text-sm sm:text-base">
+          Mã số sinh viên mới
+        </label>
         <input
           type="text"
-          name="newStudentCode"
-          value={formData.newStudentCode}
+          name="studentCode"
+          value={formData.studentCode}
           onChange={handleChange}
           className="w-full border p-2 rounded text-sm sm:text-base"
+          required
         />
       </div>
 
@@ -62,4 +66,4 @@ const StudentUpdateForm = ({ student, onSuccess, onCancel }) => {
   );
 };
 
-export default StudentUpdateForm
+export default StudentUpdateForm;

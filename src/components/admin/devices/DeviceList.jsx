@@ -23,6 +23,7 @@ const DeviceList = () => {
     setLoading(true);
     try {
       const devices = await getAllDevices(10,0);
+      console.log("Devices:", devices);
       if (devices) {
         let sno = 1;
         const data = devices.map((device) => ({

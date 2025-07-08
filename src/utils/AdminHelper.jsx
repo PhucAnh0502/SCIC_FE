@@ -1,170 +1,92 @@
-import axios from "axios";
-import env from "../config/env.js";
-import { getBeToken, getTbToken } from "../config/token.js";
+import { beInstance, tbInstance } from "../config/axios";
 import { toast } from "react-toastify";
 
 export const getAllUsers = async () => {
-  let users;
   try {
-    const response = await axios.get(`${env.BE_API_PATH}/Admin/list-user`, {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-    });
-    if (response.status === 200) {
-      users = response.data.$values;
-      toast.success("Lấy danh sách người dùng thành công!");
-    }
+    const res = await beInstance.get("/Admin/list-user");
+    toast.success("Lấy danh sách người dùng thành công!");
+    return res.$values;
   } catch (err) {
-    toast.error(err.response?.data?.Message || "Không thể lấy danh sách người dùng");
+    toast.error(err?.Message || "Không thể lấy danh sách người dùng");
+    return [];
   }
-  return users;
 };
 
 export const getDefaultUsers = async () => {
-  let defaultUsers;
   try {
-    const response = await axios.get(
-      `${env.BE_API_PATH}/User/get-defualt-user`,
-      {
-        headers: {
-          Authorization: `Bearer ${getBeToken()}`,
-        },
-      }
-    );
-    if (response.status === 200) {
-      defaultUsers = response.data.$values;
-      toast.success("Lấy thông tin người dùng mặc định thành công!");
-    }
+    const res = await beInstance.get("/User/get-defualt-user");
+    toast.success("Lấy thông tin người dùng mặc định thành công!");
+    return res.$values;
   } catch (err) {
-    toast.error(err.response?.data?.Message || "Không thể lấy thông tin người dùng");
+    toast.error(err?.Message || "Không thể lấy thông tin người dùng");
+    return [];
   }
-  return defaultUsers;
 };
 
 export const getAllStudents = async () => {
-  let users;
   try {
-    const response = await axios.get(`${env.BE_API_PATH}/Admin/list-student`, {
-      headers: {
-        Authorization: `Bearer ${getBeToken()}`,
-      },
-    });
-    if (response.status === 200) {
-      users = response.data.$values;
-      toast.success("Lấy danh sách sinh viên thành công!");
-    }
+    const res = await beInstance.get("/Admin/list-student");
+    toast.success("Lấy danh sách sinh viên thành công!");
+    return res.$values;
   } catch (err) {
-    toast.error(err.response?.data?.Message || "Không thể lấy danh sách sinh viên");
+    toast.error(err?.Message || "Không thể lấy danh sách sinh viên");
+    return [];
   }
-  return users;
 };
 
 export const getAllLecturers = async () => {
-  let lecturers;
   try {
-    const response = await axios.get(`${env.BE_API_PATH}/Admin/list-lecturer`, {
-      headers: {
-        Authorization: `Bearer ${getBeToken()}`,
-      },
-    });
-    if (response.status === 200) {
-      lecturers = response.data.$values;
-      toast.success("Lấy danh sách giảng viên thành công!");
-    }
+    const res = await beInstance.get("/Admin/list-lecturer");
+    toast.success("Lấy danh sách giảng viên thành công!");
+    return res.$values;
   } catch (err) {
-    toast.error(err.response?.data?.Message || "Không thể lấy danh sách giảng viên");
+    toast.error(err?.Message || "Không thể lấy danh sách giảng viên");
+    return [];
   }
-  return lecturers;
 };
 
 export const getAttendancesList = async () => {
-  let attendanceList;
   try {
-    const response = await axios.get(
-      `${env.BE_API_PATH}/Attendance/list-attendance`,
-      {
-        headers: {
-          Authorization: `Bearer ${getBeToken()}`,
-        },
-      }
-    );
-    if (response.status === 200) {
-      attendanceList = response.data.$values;
-      toast.success("Lấy danh sách điểm danh thành công!");
-    } else {
-      return [];
-    }
+    const res = await beInstance.get("/Attendance/list-attendance");
+    toast.success("Lấy danh sách điểm danh thành công!");
+    return res.$values;
   } catch (err) {
-    toast.error(err.response?.data?.Message || "Không thể lấy danh sách điểm danh");
+    toast.error(err?.Message || "Không thể lấy danh sách điểm danh");
+    return [];
   }
-  return attendanceList;
+};
+
+export const getAllPermissions = async () => {
+  try {
+    const res = await beInstance.get("/Permission/list-permission");
+    toast.success("Lấy danh sách phân quyền thành công!");
+    return res.$values;
+  } catch (err) {
+    toast.error(err?.Message || "Không thể lấy thông tin phân quyền");
+    return [];
+  }
 };
 
 export const getAllDevices = async (pageSize, page) => {
-  //pageSize : Maximum amount of entities in a one page
-  //page : Sequence number of page starting from 0
-  let deviceList;
   try {
-    const response = await axios.get(
-      `${env.TB_API_PATH}/tenant/deviceInfos?pageSize=${pageSize}&page=${page}`,
-      {
-        headers: {
-          Authorization: `Bearer ${getTbToken()}`,
-        },
-      }
-    );
-    if (response.status === 200) {
-      deviceList = response.data.data;
-      toast.success("Lấy danh sách thiết bị thành công!");
-    } else {
-      return [];
-    }
+    const res = await tbInstance.get("/tenant/deviceInfos", {
+      params: { pageSize, page },
+    });
+    toast.success("Lấy danh sách thiết bị thành công!");
+    return res.data;
   } catch (err) {
-    toast.error(err.response?.data?.message || "Không thể lấy danh sách thiết bị");
+    toast.error(err?.message || "Không thể lấy danh sách thiết bị");
+    return [];
   }
-  return deviceList;
 };
 
 export const getDeviceById = async (deviceId) => {
-  let device;
   try {
-    const response = await axios.get(`${env.TB_API_PATH}/device/info/${deviceId}`,{
-      headers : {
-        Authorization : `Bearer ${getTbToken()}`
-      }
-    })
-    if(response.status === 200){
-      device = response.data;
-      toast.success("Lấy thông tin thiết bị thành công!");
-    } else {
-      return {}
-    }
-  } catch (error) {
-    toast.error(error.response?.data?.message || "Không thể lấy thông tin thiết bị")
+    const res = await tbInstance.get(`/device/info/${deviceId}`);
+    toast.success("Lấy thông tin thiết bị thành công!");
+    return res;
+  } catch (err) {
+    toast.error(err?.message || "Không thể lấy thông tin thiết bị");
+    return {};
   }
-  return device
-}
-
-export const getAllPermissions = async () => {
-  let permissions;
-  try {
-    const response = await axios.get(
-      `${env.BE_API_PATH}/Permission/list-permission`,
-      {
-        headers: {
-          Authorization: `Bearer ${getBeToken()}`,
-        },
-      }
-    );
-    if (response.status === 200) {
-      permissions = response.data.$values;
-      toast.success("Lấy danh sách phân quyền thành công!");
-    } else {
-      return [];
-    }
-  } catch (error) {
-    toast.error(error.response?.data?.message || "Không thể lấy thông tin phân quyền");
-  }
-  return permissions;
 };

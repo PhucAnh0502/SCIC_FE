@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
-import env from "../../../config/env.js";
-import { getBeToken } from "../../../config/token.js";
 import { toast } from "react-toastify";
+import { beInstance } from "../../../config/axios";
+import { getBeToken } from "../../../config/token";
 
 const UserUpdateForm = ({ user, onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
-    name: user.userName || "",
+    userName: user.userName || "",
     email: user.email || "",
   });
 
@@ -18,32 +17,46 @@ const UserUpdateForm = ({ user, onSuccess, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.userName.trim() || !formData.email.trim()) {
+      toast.warn("Vui lòng điền đầy đủ thông tin.");
+      return;
+    }
+
     try {
-      const response = await axios.put(`${env.BE_API_PATH}/Admin/update-user/${user.id}`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${getBeToken()}`,
-        },
-      });
+      const response = await beInstance.put(
+        `/Admin/update-user/${user.id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${getBeToken()}`,
+          },
+        }
+      );
+
+      toast.success("Cập nhật thành công!");
       onSuccess(response.data);
     } catch (err) {
-      toast.error(err?.response?.data?.Message || "Cập nhật thất bại");
+      toast.error(err?.response?.data?.message || "Cập nhật thất bại");
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md mx-auto">
       <h2 className="text-xl font-semibold mb-4">Cập nhật thông tin người dùng</h2>
+
       <div>
-        <label className="block font-medium mb-1 text-sm sm:text-base">Tên đăng nhập</label>
+        <label className="block font-medium mb-1 text-sm sm:text-base">
+          Tên đăng nhập
+        </label>
         <input
           type="text"
-          name="name"
-          value={formData.name}
+          name="userName"
+          value={formData.userName}
           onChange={handleChange}
           className="w-full border p-2 rounded text-sm sm:text-base"
         />
       </div>
+
       <div>
         <label className="block font-medium mb-1 text-sm sm:text-base">Email</label>
         <input

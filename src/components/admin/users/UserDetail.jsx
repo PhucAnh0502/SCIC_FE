@@ -1,50 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { toast } from "react-toastify";
+import { beInstance } from "../../../config/axios";
 import UserInfo from "./UserInfo";
 import UserUpdateForm from "./UserUpdateForm";
-import env from "../../../config/env.js";
-import { getBeToken } from "../../../config/token.js";
-import { toast } from "react-toastify";
 
 const UserDetail = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
 
-  const fetchUser = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`${env.BE_API_PATH}/User/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${getBeToken()}`,
-        },
-      });
-      if (response.status === 200) {
-        toast.success("Lấy thông tin người dùng thành công!");
-        setUser(response.data);
-      }
-    } catch (err) {
-      toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await beInstance.get(`/User/${userId}`);
+        setUser(res);
+        toast.success("Lấy thông tin người dùng thành công!");
+      } catch (err) {
+        toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchUser();
   }, [userId]);
 
   const handleUpdateSuccess = (updatedUser) => {
     setUser(updatedUser);
     setEditMode(false);
-    fetchUser();
     toast.success("Cập nhật thông tin thành công!");
   };
 
-  if (loading)
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="text-center">
@@ -55,6 +45,7 @@ const UserDetail = () => {
         </div>
       </div>
     );
+  }
 
   return (
     <div className="p-2 sm:p-4 md:p-6 max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto">
@@ -80,6 +71,7 @@ const UserDetail = () => {
           </svg>
           <span className="hidden xs:inline">Quay lại</span>
         </button>
+
         {!editMode && (
           <button
             onClick={() => setEditMode(true)}
@@ -90,15 +82,17 @@ const UserDetail = () => {
         )}
       </div>
 
-      {editMode ? (
-        <UserUpdateForm
-          user={user}
-          onSuccess={handleUpdateSuccess}
-          onCancel={() => setEditMode(false)}
-        />
-      ) : (
-        <UserInfo user={user} />
-      )}
+      <div className="bg-white rounded-lg shadow-md p-3 sm:p-6">
+        {editMode ? (
+          <UserUpdateForm
+            user={user}
+            onSuccess={handleUpdateSuccess}
+            onCancel={() => setEditMode(false)}
+          />
+        ) : (
+          <UserInfo user={user} />
+        )}
+      </div>
     </div>
   );
 };

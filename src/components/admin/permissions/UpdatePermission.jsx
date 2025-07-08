@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-import env from "../../../config/env";
-import { getBeToken } from "../../../config/token.js";
 import { toast } from "react-toastify";
+import { beInstance } from "../../../config/axios";
 
 const UpdatePermission = ({
   permission,
@@ -21,14 +19,9 @@ const UpdatePermission = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        `${env.BE_API_PATH}/Permission/update-permission/${permission.id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
+      const response = await beInstance.put(
+        `/Permission/update-permission/${permission.id}`,
+        formData
       );
       onSuccess(response.data.message);
     } catch (err) {
@@ -37,14 +30,16 @@ const UpdatePermission = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto"
+    >
       <h2 className="text-xl font-semibold mb-4">Cập nhật phân quyền</h2>
+
       <div>
         <label className="block text-sm font-medium mb-2">
           Chọn người dùng
         </label>
-
-        {/* Người dùng đã chọn */}
         <div className="flex flex-wrap gap-2 mb-2">
           {formData.userIds.map((id) => {
             const user = users.find((s) => s.id === id);
@@ -71,8 +66,6 @@ const UpdatePermission = ({
             );
           })}
         </div>
-
-        {/* Danh sách người dùng chưa chọn */}
         <select
           onChange={(e) => {
             const selectedId = e.target.value;
@@ -86,9 +79,7 @@ const UpdatePermission = ({
           }}
           className="border rounded px-3 py-2 w-full text-sm"
         >
-          <option value="" key="default-student">
-            -- Chọn người dùng --
-          </option>
+          <option value="">-- Chọn người dùng --</option>
           {users
             .filter((user) => !formData.userIds.includes(user.id))
             .map((user) => (
@@ -101,8 +92,6 @@ const UpdatePermission = ({
 
       <div>
         <label className="block text-sm font-medium mb-2">Chọn thiết bị</label>
-
-        {/* Thẻ thiết bị đã chọn */}
         <div className="flex flex-wrap gap-2 mb-2">
           {formData.deviceIds.map((id) => {
             const device = devices.find((s) => s.id.id === id);
@@ -118,9 +107,7 @@ const UpdatePermission = ({
                   onClick={() =>
                     setFormData({
                       ...formData,
-                      deviceIds: formData.deviceIds.filter(
-                        (sid) => sid !== id
-                      ),
+                      deviceIds: formData.deviceIds.filter((sid) => sid !== id),
                     })
                   }
                   className="ml-2 text-blue-500 hover:text-red-500"
@@ -131,8 +118,6 @@ const UpdatePermission = ({
             );
           })}
         </div>
-
-        {/* Danh sách thiết bị chưa chọn */}
         <select
           onChange={(e) => {
             const selectedId = e.target.value;
@@ -146,9 +131,7 @@ const UpdatePermission = ({
           }}
           className="border rounded px-3 py-2 w-full text-sm"
         >
-          <option value="" key="default-student">
-            -- Chọn thiết bị --
-          </option>
+          <option value="">-- Chọn thiết bị --</option>
           {devices
             .filter((device) => !formData.deviceIds.includes(device.id.id))
             .map((device) => (
@@ -164,26 +147,28 @@ const UpdatePermission = ({
           <label className="block text-sm font-medium">Ngày bắt đầu</label>
           <input
             type="date"
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+            className="px-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={formData.timeStart.split("T")[0]}
-            onChange={(e) => {
-              setFormData({ ...formData, timeStart: e.target.value });
-            }}
+            onChange={(e) =>
+              setFormData({ ...formData, timeStart: e.target.value })
+            }
           />
         </div>
         <div className="w-full sm:w-1/2">
           <label className="block text-sm font-medium">Ngày kết thúc</label>
           <input
             type="date"
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+            className="px-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={formData.timeEnd.split("T")[0]}
-            onChange={(e) => {
-              setFormData({ ...formData, timeEnd: e.target.value });
-            }}
+            onChange={(e) =>
+              setFormData({ ...formData, timeEnd: e.target.value })
+            }
+            min={formData.timeStart.split("T")[0]}
           />
         </div>
       </div>
 
+      {/* Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <button
           type="submit"

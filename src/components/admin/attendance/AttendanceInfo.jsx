@@ -1,7 +1,5 @@
 import React from "react";
-import axios from "axios";
-import env from "../../../config/env.js";
-import { getBeToken } from "../../../config/token.js";
+import { beInstance } from "../../../config/axios";
 import { toast } from "react-toastify";
 
 const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
@@ -14,29 +12,23 @@ const AttendanceInfo = ({ attendanceInfo, deviceInfo, setAttendanceInfo }) => {
 
   const handleAttend = async (deviceId, studentId) => {
     try {
-      const response = await axios.put(
-        `${env.BE_API_PATH}/Attendance/update-student-attendance/${deviceId}/${studentId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
+      await beInstance.put(
+        `/Attendance/update-student-attendance/${deviceId}/${studentId}`
       );
-      if (response.status === 200) {
-        toast.success("Cập nhật trạng thái thành công");
 
-        const updatedStudents = attendanceInfo.student.$values.map((s) =>
-          s.student.userId === studentId ? { ...s, isAttended: true } : s
-        );
+      toast.success("Cập nhật trạng thái thành công");
 
-        setAttendanceInfo({
-          ...attendanceInfo,
-          student: { $values: updatedStudents },
-        });
-      }
+      const updatedStudents = attendanceInfo.student.$values.map((s) =>
+        s.student.userId === studentId ? { ...s, isAttended: true } : s
+      );
+
+      setAttendanceInfo({
+        ...attendanceInfo,
+        student: { $values: updatedStudents },
+      });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Thay đổi trạng thái thất bại");
+      console.log(error)
+      toast.error(error?.details || "Thay đổi trạng thái thất bại");
     }
   };
 

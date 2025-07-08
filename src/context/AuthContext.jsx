@@ -48,10 +48,6 @@ function AuthContext({ children }) {
     verifyUser();
   }, []);
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const login = async () => {
     await verifyUser()
     toast.success("Đăng nhập thành công!");

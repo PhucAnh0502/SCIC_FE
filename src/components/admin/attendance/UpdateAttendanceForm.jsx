@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
-import env from "../../../config/env";
-import { getBeToken } from "../../../config/token.js";
+import { beInstance } from "../../../config/axios.js";
 import { toast } from "react-toastify";
 
 const UpdateAttendanceForm = ({ attendance, onSuccess, onCancel, lecturers, students, devices }) => {
@@ -14,24 +12,20 @@ const UpdateAttendanceForm = ({ attendance, onSuccess, onCancel, lecturers, stud
   });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(formData)
+  e.preventDefault();
+  console.log(formData);
 
-    try {
-      const response = await axios.put(
-        `${env.BE_API_PATH}/Attendance/update-attendance/${attendance.id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
-      );
-      onSuccess(response.data.message);
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Cập nhật thất bại");
-    }
-  };
+  try {
+    const response = await beInstance.put(
+      `/Attendance/update-attendance/${attendance.id}`,
+      formData
+    );
+    onSuccess(response?.message || "Cập nhật thành công");
+  } catch (err) {
+    toast.error(err?.message || err?.Message || "Cập nhật thất bại");
+  }
+};
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
       <h2 className="text-xl font-semibold mb-4">Cập nhật thông tin điểm danh</h2>

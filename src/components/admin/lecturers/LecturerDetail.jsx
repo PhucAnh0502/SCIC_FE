@@ -1,11 +1,9 @@
-import React, {useState, useEffect} from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import env from '../../../config/env';
-import { getBeToken } from '../../../config/token.js';
-import LecturerInfo from './LecturerInfo.jsx';
-import LecturerUpdateForm from './LecturerUpdateForm.jsx';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { beInstance } from "../../../config/axios.js";
+import LecturerInfo from "./LecturerInfo.jsx";
+import LecturerUpdateForm from "./LecturerUpdateForm.jsx";
+import { toast } from "react-toastify";
 
 const LecturerDetail = () => {
   const { userId } = useParams();
@@ -17,15 +15,9 @@ const LecturerDetail = () => {
   const fetchLecturer = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${env.BE_API_PATH}/Lecturer/lecturer/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${getBeToken()}`,
-        },
-      });
-      if (response.status === 200) {
-        toast.success("Lấy thông tin giảng viên thành công!");
-        setLecturer(response.data);
-      }
+      const response = await beInstance.get(`/Lecturer/lecturer/${userId}`);
+      toast.success("Lấy thông tin giảng viên thành công!");
+      setLecturer(response);
     } catch (err) {
       toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
     } finally {
@@ -103,6 +95,6 @@ const LecturerDetail = () => {
       </div>
     </div>
   );
-}
+};
 
-export default LecturerDetail
+export default LecturerDetail;

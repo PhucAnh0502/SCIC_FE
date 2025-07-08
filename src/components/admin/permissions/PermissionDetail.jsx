@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import env from "../../../config/env";
-import { getBeToken } from "../../../config/token";
+import { toast } from "react-toastify";
+import { getAllDevices, getAllUsers } from "../../../utils/AdminHelper";
+import { beInstance } from "../../../config/axios";
 import PermissionInfo from "./PermissionInfo";
 import UpdatePermission from "./UpdatePermission";
-import { getAllDevices, getAllUsers } from "../../../utils/AdminHelper";
-import { toast } from "react-toastify";
 
 const PermissionDetail = () => {
   const { permissionId } = useParams();
@@ -18,46 +16,35 @@ const PermissionDetail = () => {
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
-  const fetchData = async () => {
-    const [users, devices] = await Promise.all([
-      getAllUsers(),
-      getAllDevices(99, 0),
-    ]);
-    setUsers(users);
-    setDevices(devices);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      const [usersData, devicesData] = await Promise.all([
+        getAllUsers(),
+        getAllDevices(99, 0),
+      ]);
+      setUsers(usersData);
+      setDevices(devicesData);
+    };
+
     fetchData();
   }, []);
-
-  const fetchPermissionInfo = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${env.BE_API_PATH}/Permission/get-permission/${permissionId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        toast.success("Lấy thông tin phân quyền thành công!");
-        setPermissionInfo(response.data);
-      }
-    } catch (error) {
-      toast.error(
-        error?.response?.data?.message || "không thể lấy thông tin phân quyền"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     fetchPermissionInfo();
   }, [permissionId]);
+
+  const fetchPermissionInfo = async () => {
+    setLoading(true);
+    try {
+      const data = await beInstance.get(`/Permission/get-permission/${permissionId}`);
+      setPermissionInfo(data);
+      toast.success("Lấy thông tin phân quyền thành công!");
+    } catch (error) {
+      toast.error(error?.message || "Không thể lấy thông tin phân quyền");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleUpdateSuccess = (updatedPermission) => {
     setPermissionInfo(updatedPermission);
@@ -66,7 +53,7 @@ const PermissionDetail = () => {
     toast.success("Cập nhật phân quyền thành công!");
   };
 
-  if (loading)
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="text-center">
@@ -77,6 +64,8 @@ const PermissionDetail = () => {
         </div>
       </div>
     );
+  }
+
   return (
     <div className="p-2 sm:p-4 md:p-6 max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">

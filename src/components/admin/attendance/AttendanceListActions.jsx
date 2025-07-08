@@ -1,8 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { beInstance } from "../../../config/axios.js";
 import { FaEye, FaTrash } from "react-icons/fa";
-import env from "../../../config/env.js";
 import { toast } from "react-toastify";
 import ShowDeleteConfirm from "../../toast/ShowDeleteConfirm";
 
@@ -12,19 +11,10 @@ const AttendanceListActions = ({ id, onAttendanceRefresh }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${env.BE_API_PATH}/Attendance/delete-attendance/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        }
-      );
+      await beInstance.delete(`/Attendance/delete-attendance/${id}`);
 
-      if (response.status === 200) {
-        toast.success("Xóa điểm danh thành công!");
-        onAttendanceRefresh();
-      }
+      toast.success("Xóa điểm danh thành công!");
+      onAttendanceRefresh();
     } catch (error) {
       toast.error(
         error?.response?.data?.Message || "Có lỗi xảy ra khi xóa điểm danh"

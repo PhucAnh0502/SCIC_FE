@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getDefaultUsers } from "../../../utils/AdminHelper";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import env from "../../../config/env.js";
-import { getBeToken } from "../../../config/token.js";
+import { beInstance } from "../../../config/axios.js";
 import { toast } from "react-toastify";
 
 const AddLecturer = () => {
@@ -16,7 +14,7 @@ const AddLecturer = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0]; 
+    const today = new Date().toISOString().split("T")[0];
     setHireDate(today);
   }, []);
 
@@ -26,7 +24,9 @@ const AddLecturer = () => {
       const defaultUsers = await getDefaultUsers();
       setDefaultUsers(defaultUsers);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Không thể lấy dữ liệu người dùng");
+      toast.error(
+        err.response?.data?.message || "Không thể lấy dữ liệu người dùng"
+      );
     } finally {
       setLoading(false);
     }
@@ -38,25 +38,22 @@ const AddLecturer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post(
-        `${env.BE_API_PATH}/Admin/create-lecturer/${selectedUserId}`,
+      const response = await beInstance.post(
+        `/Admin/create-lecturer/${selectedUserId}`,
         {
           lecturerCode,
           hireDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
         }
       );
-      if (response) {
-        toast.success(response.data.message);
+
+      if (response?.message) {
+        toast.success(response.message);
         navigate(-1);
       }
     } catch (error) {
-      toast.error(error.response?.data?.Message || "Đăng ký thất bại");
+      toast.error(error?.Message || "Đăng ký thất bại");
     }
   };
 
@@ -105,7 +102,9 @@ const AddLecturer = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Chọn người dùng</label>
+        <label className="block text-sm font-medium mb-1">
+          Chọn người dùng
+        </label>
         <select
           value={selectedUserId}
           onChange={(e) => setSelectedUserId(e.target.value)}

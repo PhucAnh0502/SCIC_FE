@@ -11,27 +11,27 @@ const UserInfo = ({ user }) => {
           <tbody>
             <tr className="even:bg-gray-50 border-b">
               <td className="p-3 font-semibold text-gray-700">Tên đăng nhập</td>
-              <td className="p-3 text-gray-800">{user.userName}</td>
+              <td className="p-3 text-gray-800">{user?.userName}</td>
             </tr>
             <tr className="even:bg-gray-50 border-b">
               <td className="p-3 font-semibold text-gray-700">Họ và tên</td>
-              <td className="p-3 text-gray-800">{user.fullName}</td>
+              <td className="p-3 text-gray-800">{user?.fullName}</td>
             </tr>
             <tr className="even:bg-gray-50 border-b">
               <td className="p-3 font-semibold text-gray-700">Số CCCD</td>
-              <td className="p-3 text-gray-800">{user.idNumber}</td>
+              <td className="p-3 text-gray-800">{user?.idNumber}</td>
             </tr>
             <tr className="even:bg-gray-50 border-b">
               <td className="p-3 font-semibold text-gray-700">Email</td>
-              <td className="p-3 text-gray-800">{user.email}</td>
+              <td className="p-3 text-gray-800">{user?.email}</td>
             </tr>
             <tr className="even:bg-gray-50 border-b">
               <td className="p-3 font-semibold text-gray-700">Vai trò</td>
               <td className="p-3 text-gray-800">
-                {user.userRoles?.$values?.map((role, index) => (
+                {user?.userRoles?.$values?.map((role, index) => (
                   <span key={index}>
-                    {role.roleName}
-                    {index < user.userRoles.$values.length - 1 ? ", " : ""}
+                    {role}
+                    {index < user?.userRoles?.$values.length - 1 ? ", " : ""}
                   </span>
                 ))}
               </td>
@@ -43,7 +43,7 @@ const UserInfo = ({ user }) => {
         <div className="text-center">
           <p className="font-medium text-gray-700 mb-1">Ảnh khuôn mặt</p>
           <img
-            src={user.faceImage ? user.faceImage : "/images/faceImage.jpg"}
+            src={user?.faceImage ? user?.faceImage : "/images/faceImage.jpg"}
             alt="Ảnh khuôn mặt"
             className="w-full max-w-xs sm:max-w-sm h-auto object-cover rounded-md border mx-auto"
           />
@@ -51,7 +51,7 @@ const UserInfo = ({ user }) => {
         <div className="text-center">
           <p className="font-medium text-gray-700 mb-1">Ảnh vân tay</p>
           <img
-            src={user.fingerprintImage ? user.fingerprintImage : "/images/fingerprintImage.png"}
+            src={user?.fingerprintImage ? user?.fingerprintImage : "/images/fingerprintImage.png"}
             alt="Ảnh vân tay"
             className="w-full max-w-xs sm:max-w-sm h-auto object-cover rounded-md border mx-auto"
           />

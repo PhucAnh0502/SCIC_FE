@@ -1,11 +1,9 @@
-import React, {useState, useEffect} from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import env from '../../../config/env';
-import StudentUpdateForm from './StudentUpdateForm';
-import StudentInfo from './StudentInfo';
-import { getBeToken } from '../../../config/token.js';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { beInstance } from "../../../config/axios";
+import StudentUpdateForm from "./StudentUpdateForm";
+import StudentInfo from "./StudentInfo";
+import { toast } from "react-toastify";
 
 const StudentDetail = () => {
   const { userId } = useParams();
@@ -17,15 +15,9 @@ const StudentDetail = () => {
   const fetchStudent = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${env.BE_API_PATH}/Student/student/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${getBeToken()}`,
-        },
-      });
-      if (response.status === 200) {
-        toast.success("Lấy thông tin sinh viên thành công!");
-        setStudent(response.data);
-      }
+      const response = await beInstance.get(`/Student/student/${userId}`);
+      toast.success("Lấy thông tin sinh viên thành công!");
+      setStudent(response);
     } catch (err) {
       toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
     } finally {
@@ -40,7 +32,7 @@ const StudentDetail = () => {
   const handleUpdateSuccess = (updatedStudent) => {
     setStudent(updatedStudent);
     setEditMode(false);
-    fetchStudent();
+    fetchStudent(); // Refresh data in case of backend update differences
   };
 
   if (loading)
@@ -102,6 +94,6 @@ const StudentDetail = () => {
       </div>
     </div>
   );
-}
+};
 
-export default StudentDetail
+export default StudentDetail;

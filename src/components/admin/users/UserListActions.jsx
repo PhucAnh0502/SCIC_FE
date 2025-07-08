@@ -1,31 +1,27 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { FaEye, FaTrash } from "react-icons/fa";
-import env from "../../../config/env.js";
-import { getBeToken } from "../../../config/token.js";
 import { toast } from "react-toastify";
 import ShowDeleteConfirm from "../../toast/ShowDeleteConfirm";
+import { beInstance } from "../../../config/axios";
 
 const UserListActions = ({ id, onUserRefresh }) => {
   const navigate = useNavigate();
   const role = sessionStorage.getItem("role");
 
   const handleDelete = async () => {
-    try {
-      const response = await axios.delete(`${env.BE_API_PATH}/Admin/delete-user/${id}`, {
-        headers: {
-          Authorization: `Bearer ${getBeToken()}`,
-        },
-      });
+    if (!id) {
+      toast.error("ID người dùng không hợp lệ.");
+      return;
+    }
 
-      if (response.data) {
-        toast.success("Xóa người dùng thành công!");
-        onUserRefresh();
-      }
+    try {
+      const res = await beInstance.delete(`/Admin/delete-user/${id}`);
+      toast.success(res.data?.message || "Xóa người dùng thành công!");
+      onUserRefresh();
     } catch (err) {
       toast.error(
-        err.response?.Message || "Có lỗi xảy ra khi xóa người dùng"
+        err?.response?.data?.message || "Có lỗi xảy ra khi xóa người dùng."
       );
     }
   };
@@ -34,8 +30,8 @@ const UserListActions = ({ id, onUserRefresh }) => {
     <div className="flex flex-wrap gap-2 sm:gap-4 justify-center">
       <button
         title="Xem chi tiết"
-        className="border border-blue-600 text-blue-600 p-2 rounded-full hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out transform hover:scale-110 m-1 sm:m-2"
         onClick={() => navigate(`/${role}-dashboard/users/${id}`)}
+        className="border border-blue-600 text-blue-600 p-2 rounded-full hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out transform hover:scale-110 m-1 sm:m-2"
       >
         <FaEye size={18} />
       </button>

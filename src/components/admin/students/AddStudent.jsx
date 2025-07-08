@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getDefaultUsers } from "../../../utils/AdminHelper";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import env from "../../../config/env.js";
-import { getBeToken } from "../../../config/token.js";
 import { toast } from "react-toastify";
+import { beInstance } from "../../../config/axios";
 
 const AddStudent = () => {
   const [loading, setLoading] = useState(false);
@@ -26,7 +24,9 @@ const AddStudent = () => {
       const defaultUsers = await getDefaultUsers();
       setDefaultUsers(defaultUsers);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Không thể lấy dữ liệu người dùng");
+      toast.error(
+        err?.response?.data?.message || "Không thể lấy dữ liệu người dùng"
+      );
     } finally {
       setLoading(false);
     }
@@ -39,24 +39,15 @@ const AddStudent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${env.BE_API_PATH}/Admin/create-student/${selectedUserId}`,
-        {
-          studentCode,
-          enrollDate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
+      const response = await beInstance.post(
+        `/Admin/create-student/${selectedUserId}`,
+        { studentCode, enrollDate }
       );
-      if (response) {
-        toast.success(response.data.message || "Thêm sinh viên thành công");
-        navigate(-1);
-      }
+      toast.success(response.message || "Thêm sinh viên thành công");
+      navigate(-1);
     } catch (error) {
-      toast.error(error.response?.data?.Message || "Đăng ký thất bại");
+      console.log(error);
+      toast.error(error.message || "Đăng ký thất bại");
     }
   };
 

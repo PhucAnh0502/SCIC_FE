@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllDevices, getAllUsers } from "../../../utils/AdminHelper";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import env from "../../../config/env";
-import { getBeToken } from "../../../config/token";
+import { beInstance } from "../../../config/axios";
 import { toast } from "react-toastify";
 
 const CreatePermission = () => {
@@ -34,6 +32,7 @@ const CreatePermission = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (
       !formData.userIds.length ||
       !formData.deviceIds.length ||
@@ -43,22 +42,15 @@ const CreatePermission = () => {
       setErrorMessage("Vui lòng điền đầy đủ thông tin phân quyền.");
       return;
     }
+
     try {
-      const response = await axios.post(
-        `${env.BE_API_PATH}/Permission/create-permission`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        toast.success("Phân quyền thành công!");
-        navigate("/admin-dashboard/permissions");
-      }
+      await beInstance.post("/Permission/create-permission", formData);
+      console.log(formData);
+      toast.success("Phân quyền thành công!");
+      navigate("/admin-dashboard/permissions");
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Có lỗi khi phân quyền");
+      console.log(error);
+      toast.error(error?.message || error?.details || "Có lỗi khi phân quyền");
     }
   };
 
@@ -93,20 +85,21 @@ const CreatePermission = () => {
           Phân quyền
         </h2>
       </div>
+
       {errorMessage && (
         <div className="text-red-600 text-sm bg-red-100 px-4 py-2 rounded border border-red-300 mb-2">
           ⚠️ {errorMessage}
         </div>
       )}
 
+      {/* Người dùng */}
       <div>
         <label className="block text-sm font-medium mb-2">
           Chọn người dùng
         </label>
-        {/* Thẻ người dùng đã chọn */}
         <div className="flex flex-wrap gap-2 mb-2">
           {formData.userIds.map((id) => {
-            const user = users.find((s) => s.id === id);
+            const user = users.find((u) => u.id === id);
             if (!user) return null;
             return (
               <div
@@ -119,9 +112,7 @@ const CreatePermission = () => {
                   onClick={() =>
                     setFormData({
                       ...formData,
-                      userIds: formData.userIds.filter(
-                        (sid) => sid !== id
-                      ),
+                      userIds: formData.userIds.filter((uid) => uid !== id),
                     })
                   }
                   className="ml-2 text-blue-500 hover:text-red-500"
@@ -132,7 +123,6 @@ const CreatePermission = () => {
             );
           })}
         </div>
-        {/* Danh sách người dùng chưa chọn */}
         <select
           onChange={(e) => {
             const selectedId = e.target.value;
@@ -146,9 +136,7 @@ const CreatePermission = () => {
           }}
           className="border rounded px-3 py-2 w-full text-sm"
         >
-          <option value="" key="default-student">
-            -- Chọn người dùng --
-          </option>
+          <option value="">-- Chọn người dùng --</option>
           {users
             .filter((user) => !formData.userIds.includes(user.id))
             .map((user) => (
@@ -159,12 +147,12 @@ const CreatePermission = () => {
         </select>
       </div>
 
+      {/* Thiết bị */}
       <div>
         <label className="block text-sm font-medium mb-2">Chọn thiết bị</label>
-        {/* Thẻ thiết bị đã chọn */}
         <div className="flex flex-wrap gap-2 mb-2">
           {formData.deviceIds.map((id) => {
-            const device = devices.find((s) => s.id.id === id);
+            const device = devices.find((d) => d.id.id === id);
             if (!device) return null;
             return (
               <div
@@ -177,7 +165,7 @@ const CreatePermission = () => {
                   onClick={() =>
                     setFormData({
                       ...formData,
-                      deviceIds: formData.deviceIds.filter((sid) => sid !== id),
+                      deviceIds: formData.deviceIds.filter((did) => did !== id),
                     })
                   }
                   className="ml-2 text-blue-500 hover:text-red-500"
@@ -188,7 +176,6 @@ const CreatePermission = () => {
             );
           })}
         </div>
-        {/* Danh sách thiết bị chưa chọn */}
         <select
           onChange={(e) => {
             const selectedId = e.target.value;
@@ -202,19 +189,22 @@ const CreatePermission = () => {
           }}
           className="border rounded px-3 py-2 w-full text-sm"
         >
-          <option value="" key="default-student">
-            -- Chọn thiết bị --
-          </option>
+          <option value="">-- Chọn thiết bị --</option>
           {devices
             .filter((device) => !formData.deviceIds.includes(device.id.id))
             .map((device) => (
               <option key={device.id.id} value={device.id.id}>
-                {device.type} ({device.label || "N/A"})
+                {device.type} (
+                {(device.label || "N/A") +
+                  " - " +
+                  (device.active ? "Hoạt động" : "Không hoạt động")}
+                )
               </option>
             ))}
         </select>
       </div>
 
+      {/* Thời gian */}
       <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-10 flex-wrap">
         <div className="w-full sm:w-1/2">
           <label className="block text-sm font-medium">Ngày bắt đầu</label>

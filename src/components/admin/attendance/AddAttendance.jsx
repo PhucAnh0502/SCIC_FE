@@ -5,9 +5,7 @@ import {
   getAllStudents,
 } from "../../../utils/AdminHelper";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import env from "../../../config/env";
-import { getBeToken } from "../../../config/token";
+import { beInstance } from "../../../config/axios";
 import { toast } from "react-toastify";
 
 const AddAttendance = () => {
@@ -42,19 +40,12 @@ const AddAttendance = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${env.BE_API_PATH}/Attendance/create-attendance`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
+      await beInstance.post(
+        "/Attendance/create-attendance",
+        formData
       );
-      if (response.status === 200) {
-        toast.success("Tạo danh sách điêm danh thành công!");
-        navigate("/admin-dashboard/attendances");
-      }
+      toast.success("Tạo danh sách điểm danh thành công!");
+      navigate("/admin-dashboard/attendances");
     } catch (error) {
       toast.error(
         error?.response?.data?.message || "Có lỗi khi thêm danh sách điểm danh"
@@ -95,7 +86,9 @@ const AddAttendance = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">Chọn giảng viên</label>
+        <label className="block text-sm font-medium mb-2">
+          Chọn giảng viên
+        </label>
         <select
           value={formData.lecturerId}
           onChange={(e) =>
@@ -158,7 +151,9 @@ const AddAttendance = () => {
           }}
           className="border rounded px-3 py-2 w-full text-sm"
         >
-          <option value="" key="default-student">-- Chọn sinh viên --</option>
+          <option value="" key="default-student">
+            -- Chọn sinh viên --
+          </option>
           {students
             .filter((student) => !formData.studentIds.includes(student.userId))
             .map((student) => (

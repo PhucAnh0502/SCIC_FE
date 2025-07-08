@@ -23,7 +23,7 @@ const UserChart = ({ data, studentCount, lecturerCount, defaultUserCount }) => (
     <ul className="mt-4 space-y-1 text-sm text-center">
       <li>Sinh viên: <b>{studentCount}</b></li>
       <li>Giảng viên: <b>{lecturerCount}</b></li>
-      <li>Người dùng mặc định: <b>{defaultUserCount}</b></li>
+      <li>Khác: <b>{defaultUserCount}</b></li>
     </ul>
   </div>
 );

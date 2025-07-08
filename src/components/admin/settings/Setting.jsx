@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import env from "../../../config/env";
-import UserInfo from "../users/UserInfo";
-import { getBeToken } from "../../../config/token.js";
 import { toast } from "react-toastify";
+import { beInstance } from "../../../config/axios";
+import UserInfo from "../users/UserInfo";
 
 const Setting = () => {
   const userId = sessionStorage.getItem("userId");
@@ -16,15 +14,9 @@ const Setting = () => {
   const fetchUser = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${env.BE_API_PATH}/User/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${getBeToken()}`,
-        },
-      });
-      if (response.status === 200) {
-        toast.success("Lấy thông tin người dùng thành công!");
-        setUser(response.data);
-      }
+      const response = await beInstance.get(`/User/${userId}`);
+      toast.success("Lấy thông tin người dùng thành công!");
+      setUser(response);
     } catch (err) {
       toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
     } finally {

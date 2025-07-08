@@ -1,10 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { FaEye, FaTrash } from "react-icons/fa";
-import env from "../../../config/env.js";
-import { getBeToken } from "../../../config/token.js";
 import { toast } from "react-toastify";
+import { beInstance } from "../../../config/axios";
 import ShowDeleteConfirm from "../../toast/ShowDeleteConfirm";
 
 const StudentListActions = ({ id, onStudentRefresh }) => {
@@ -13,22 +11,14 @@ const StudentListActions = ({ id, onStudentRefresh }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `${env.BE_API_PATH}/Admin/delete-student/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${getBeToken()}`,
-          },
-        }
-      );
-
-      if (response.data) {
-        toast.success("Xóa sinh viên thành công!");
-        onStudentRefresh();
-      }
+      const response = await beInstance.delete(`/Admin/delete-student/${id}`);
+      toast.success(response.data?.message || "Xóa sinh viên thành công!");
+      onStudentRefresh();
     } catch (err) {
       toast.error(
-        err.response?.Message || "Có lỗi xảy ra khi xóa sinh viên"
+        err.response?.data?.message ||
+        err.response?.data?.Message ||
+        "Có lỗi xảy ra khi xóa sinh viên"
       );
     }
   };
@@ -42,6 +32,7 @@ const StudentListActions = ({ id, onStudentRefresh }) => {
       >
         <FaEye size={18} />
       </button>
+
       <ShowDeleteConfirm
         onConfirm={handleDelete}
         message="Bạn chắc chắn muốn xóa sinh viên này?"

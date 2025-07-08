@@ -1,7 +1,5 @@
 import React, {useState} from 'react'
-import axios from 'axios';
-import env from "../../../config/env.js"
-import { getBeToken } from '../../../config/token.js';
+import { beInstance } from '../../../config/axios.js';
 import { toast } from 'react-toastify';
 
 const LecturerUpdateForm = ({ lecturer, onSuccess, onCancel }) => {
@@ -17,12 +15,8 @@ const LecturerUpdateForm = ({ lecturer, onSuccess, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`${env.BE_API_PATH}/Admin/update-lecturer/${lecturer.userId}`, formData, {
-        headers: {
-          "Authorization": `Bearer ${getBeToken()}`,
-        },
-      });
-      onSuccess(response.data.message);
+      const response = await beInstance.put(`/Admin/update-lecturer/${lecturer.userId}`, formData);
+      onSuccess(response.message || "Cập nhật thông tin giảng viên thành công");
     } catch (err) {
       toast.error(err?.response?.data?.Message || "Cập nhật thất bại");
     }

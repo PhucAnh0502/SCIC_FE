@@ -1,30 +1,30 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { convertToBase64 } from "../../../utils/ImageHelper";
-import env from "../../../config/env.js"
-import { getBeToken } from "../../../config/token.js";
 import { toast } from "react-toastify";
+import { beInstance } from "../../../config/axios";
+import { convertToBase64 } from "../../../utils/ImageHelper";
 
 const AddUser = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     userName: "",
     fullName: "",
     idNumber: "",
     email: "",
     password: "",
-    faceImage: "",
-    fingerprintImage: "",
+    faceImage: null,
+    fingerprintImage: null,
   });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "faceImage" || name === "fingerprintImage") {
-      setFormData((prevData) => ({ ...prevData, [name]: files[0] }));
+    if (files && files.length) {
+      setFormData((prev) => ({ ...prev, [name]: files[0] }));
     } else {
-      setFormData((prevData) => ({ ...prevData, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -32,45 +32,26 @@ const AddUser = () => {
     e.preventDefault();
     setError(null);
 
-    if (!formData.faceImage || !formData.fingerprintImage) {
-      setError("Vui lòng chọn ảnh khuôn mặt và ảnh vân tay.");
-      return;
+    const { faceImage, fingerprintImage } = formData;
+    if (!faceImage || !fingerprintImage) {
+      return setError("Vui lòng chọn ảnh khuôn mặt và ảnh vân tay.");
     }
 
     try {
-      const faceBase64 = await convertToBase64(formData.faceImage);
-      const fingerprintBase64 = await convertToBase64(
-        formData.fingerprintImage
-      );
-
       const payload = {
-        userName: formData.userName,
-        fullName: formData.fullName,
-        idNumber: formData.idNumber,
-        email: formData.email,
-        password: formData.password,
-        faceImage: faceBase64,
-        fingerprintImage: fingerprintBase64,
+        ...formData,
+        faceImage: await convertToBase64(faceImage),
+        fingerprintImage: await convertToBase64(fingerprintImage),
       };
-      console.log(payload);
 
-      const response = await axios.post(
-        `${env.BE_API_PATH}/Admin/create-user`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${getBeToken()}`
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        toast.success("Đăng ký thành công!");
-        setTimeout(() => navigate(-1), 2000);
-      }
+      const res = await beInstance.post("/Admin/create-user", payload);
+      toast.success(res.message || "Thêm người dùng thành công");
+      setTimeout(() => navigate(-1), 1500);
     } catch (err) {
-      toast.error(err.response?.data.Message || "Đăng ký thất bại");
+      toast.error(
+        err?.Message ||
+        "Đăng ký thất bại"
+      );
     }
   };
 
@@ -83,19 +64,10 @@ const AddUser = () => {
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition text-sm sm:text-base"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M15 19l-7-7 7-7" />
             </svg>
             <span className="hidden xs:inline">Quay lại</span>
           </button>
@@ -108,12 +80,12 @@ const AddUser = () => {
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           {[
-            { label: "Tên người dùng", name: "userName", type: "text" },
-            { label: "Họ tên đầy đủ", name: "fullName", type: "text" },
-            { label: "Số CCCD", name: "idNumber", type: "text" },
-            { label: "Email", name: "email", type: "email" },
-            { label: "Mật khẩu", name: "password", type: "password" },
-          ].map(({ label, name, type }) => (
+            { name: "userName", label: "Tên người dùng", type: "text" },
+            { name: "fullName", label: "Họ tên đầy đủ", type: "text" },
+            { name: "idNumber", label: "Số CCCD", type: "text" },
+            { name: "email", label: "Email", type: "email" },
+            { name: "password", label: "Mật khẩu", type: "password" },
+          ].map(({ name, label, type }) => (
             <div key={name}>
               <label className="block text-gray-700 font-medium mb-1">
                 {label}
@@ -121,40 +93,31 @@ const AddUser = () => {
               <input
                 type={type}
                 name={name}
-                onChange={handleChange}
                 required
+                onChange={handleChange}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           ))}
 
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Ảnh khuôn mặt
-            </label>
-            <input
-              name="faceImage"
-              type="file"
-              accept="image/*"
-              onChange={handleChange}
-              required
-              className="w-full text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Ảnh vân tay
-            </label>
-            <input
-              name="fingerprintImage"
-              type="file"
-              accept="image/*"
-              onChange={handleChange}
-              required
-              className="w-full text-sm"
-            />
-          </div>
+          {[
+            { name: "faceImage", label: "Ảnh khuôn mặt" },
+            { name: "fingerprintImage", label: "Ảnh vân tay" },
+          ].map(({ name, label }) => (
+            <div key={name}>
+              <label className="block text-gray-700 font-medium mb-1">
+                {label}
+              </label>
+              <input
+                name={name}
+                type="file"
+                accept="image/*"
+                required
+                onChange={handleChange}
+                className="w-full text-sm"
+              />
+            </div>
+          ))}
 
           <button
             type="submit"
