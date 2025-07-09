@@ -43,7 +43,7 @@ const UserInfo = ({ user }) => {
         <div className="text-center">
           <p className="font-medium text-gray-700 mb-1">Ảnh khuôn mặt</p>
           <img
-            src={user?.faceImage ? user?.faceImage : "/images/faceImage.jpg"}
+            src={user?.faceImage ? user?.faceImage : "/public/faceImage.jpg"}
             alt="Ảnh khuôn mặt"
             className="w-full max-w-xs sm:max-w-sm h-auto object-cover rounded-md border mx-auto"
           />
@@ -51,7 +51,7 @@ const UserInfo = ({ user }) => {
         <div className="text-center">
           <p className="font-medium text-gray-700 mb-1">Ảnh vân tay</p>
           <img
-            src={user?.fingerprintImage ? user?.fingerprintImage : "/images/fingerprintImage.png"}
+            src={user?.fingerprintImage ? user?.fingerprintImage : "/public/fingerprintImage.png"}
             alt="Ảnh vân tay"
             className="w-full max-w-xs sm:max-w-sm h-auto object-cover rounded-md border mx-auto"
           />
