@@ -11,6 +11,7 @@ import {
   FaClipboardCheck,
   FaBars,
   FaTimes,
+  FaClock,
 } from "react-icons/fa";
 
 const Sidebar = () => {
@@ -53,8 +54,8 @@ const Sidebar = () => {
           </button>
         </div>
         {/* Header */}
-        <div className="bg-blue-500 h-16 flex items-center justify-center shadow-md text-xl font-bold">
-          SCIC
+        <div className="bg-slate-900 h-16 flex items-center justify-center shadow-md text-xl font-bold">
+          <img src="/src/public/images/logo.png" alt="logo" className="w-16 h-16 "/>
         </div>
         {/* NavLinks */}
         <div className="space-y-3 mt-4">
@@ -142,6 +143,18 @@ const Sidebar = () => {
           >
             <FaClipboardCheck className="text-xl" />
             <span className="text-base md:text-lg">Điểm danh</span>
+          </NavLink>
+          <NavLink
+            to={`/${role}-dashboard/log-list`}
+            className={({ isActive }) =>
+              `${
+                isActive ? "bg-blue-400" : "hover:bg-blue-600"
+              } flex items-center space-x-4 block py-3 px-6 rounded-lg transition-colors duration-300`
+            }
+            onClick={() => setOpen(false)}
+          >
+            <FaClock className="text-xl" />
+            <span className="text-base md:text-lg">Nhật ký vào/ra</span>
           </NavLink>
           <NavLink
             to={`/${role}-dashboard/setting`}

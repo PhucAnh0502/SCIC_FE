@@ -28,6 +28,7 @@ import DeviceDetail from "./components/admin/devices/DeviceDetail";
 import AdminSummary from "./components/admin/summary/AdminSummary";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LogList from "./components/admin/checkLogs/LogList";
 
 function App() {
   return (
@@ -119,6 +120,12 @@ function App() {
           <Route
             path="/admin-dashboard/attendances/create-attendance"
             element={<AddAttendance onClose={() => window.history.back()} />}
+          />
+
+          {/* Logs */}
+          <Route
+            path="/admin-dashboard/log-list"
+            element={<LogList onClose={() => window.history.back()} />}
           />
 
           {/* Permission */}

@@ -12,6 +12,17 @@ export const getAllUsers = async () => {
   }
 };
 
+export const getUserById = async (userId) => {
+  try {
+    const res = await beInstance.get(`/User/${userId}`);
+    toast.success("Lấy thông tin người dùng thành công!");
+    return res
+  } catch (error) {
+    toast.error(error?.message || "Không thể lấy thông tin người dùng");
+    return {};   
+  }
+}
+
 export const getDefaultUsers = async () => {
   try {
     const res = await beInstance.get("/User/get-defualt-user");
@@ -88,5 +99,16 @@ export const getDeviceById = async (deviceId) => {
   } catch (err) {
     toast.error(err?.message || "Không thể lấy thông tin thiết bị");
     return {};
+  }
+};
+
+export const getAllLogs = async () => {
+  try {
+    const res = await beInstance.get("AttendanceLog/list-log");
+    toast.success("Lấy nhật ký vào ra thành công!");
+    return res.$values;
+  } catch (err) {
+    toast.error(err?.message || "Không thể lấy nhật ký vào ra");
+    return [];
   }
 };
