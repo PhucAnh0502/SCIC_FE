@@ -55,7 +55,7 @@ const Sidebar = () => {
         </div>
         {/* Header */}
         <div className="bg-slate-900 h-16 flex items-center justify-center shadow-md text-xl font-bold">
-          <img src="/public/logo.png" alt="logo" className="w-16 h-16 "/>
+          <img src="/logo.png" alt="logo" className="w-16 h-16 "/>
         </div>
         {/* NavLinks */}
         <div className="space-y-3 mt-4">
