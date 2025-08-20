@@ -21,7 +21,7 @@ const LogFilters = ({
             onChange={handleStatusChange}
           >
             <option value="">Tất cả</option>
-            <option value="Check in">Check in</option>
+            <option value="Check-in">Check-in</option>
             <option value="Check-in late">Check-in late</option>
             <option value="Check out">Check out</option>
           </select>

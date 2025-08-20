@@ -58,7 +58,7 @@ function AuthContext({ children }) {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("role");
-    toast.info("Đăng xuất thành công!");
+    toast.info("Bạn đã đăng xuất!");
   };
 
   return (

@@ -33,7 +33,7 @@ export const columns = [
       <span
         className={`px-3 py-1 rounded-full text-white text-sm font-semibold
         ${
-          row.status === "Check in"
+          row.status === "Check-in"
             ? "bg-green-600"
             : row.status === "Check-in late"
             ? "bg-yellow-500"

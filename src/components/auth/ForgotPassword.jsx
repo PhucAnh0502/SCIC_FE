@@ -33,55 +33,81 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen justify-center bg-gradient-to-b from-blue-100 to-blue-300 space-y-6">
-      <div className="border shadow-lg rounded-lg p-4 sm:p-6 w-full max-w-md bg-white">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-blue-600">
-          Quên mật khẩu
-        </h2>
-        <form
-          className="rounded-lg border border-gray-200 p-4 sm:p-6"
-          onSubmit={handleSubmit}
-        >
-          <div className="mb-4">
+    <div className="flex flex-col items-center h-screen justify-center bg-gradient-to-br from-blue-50 to-white p-6">
+      <div className="border shadow-lg rounded-2xl p-6 sm:p-8 w-full max-w-md bg-white/95 backdrop-blur-md">
+        {/* Header với nút Back */}
+        <div className="relative mb-6 flex items-center justify-center">
+          <button
+            type="button"
+            onClick={() => navigate("/login")} // route quay lại màn hình login
+            className="absolute left-0 flex items-center text-blue-600 hover:text-blue-800 transition"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <h2 className="text-2xl sm:text-3xl font-semibold text-blue-600">
+            Quên mật khẩu
+          </h2>
+        </div>
+
+        {/* Form */}
+        <form className="space-y-5" onSubmit={handleSubmit}>
+          <div>
             <label
               htmlFor="email"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-blue-600 font-medium mb-2"
             >
-              Nhập email
+              Email
             </label>
             <input
               type="email"
               name="email"
               placeholder="abc@gmail.com"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-blue-200 rounded-lg 
+            focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent bg-white/80"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-          <div className="mb-4">
+
+          <div>
             <label
               htmlFor="password"
-              className="block text-gray-700 font-medium mb-2"
+              className="block text-blue-600 font-medium mb-2"
             >
-              Nhập mật khẩu mới
+              Mật khẩu mới
             </label>
             <input
               name="password"
               type="password"
               placeholder="*********"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-blue-200 rounded-lg 
+            focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent bg-white/80"
               onChange={(e) => setNewPassword(e.target.value)}
               required
             />
           </div>
-          <div className="mb-4 mt-8">
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-            >
-              Đổi mật khẩu
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg 
+          hover:bg-blue-700 transition-all duration-300 font-medium"
+          >
+            Đổi mật khẩu
+          </button>
         </form>
       </div>
     </div>
