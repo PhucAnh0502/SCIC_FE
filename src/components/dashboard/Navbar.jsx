@@ -1,23 +1,41 @@
-import React from "react";
-import { FaSignOutAlt } from "react-icons/fa";
+import React, { useState, useRef, useEffect } from "react";
+import { FaUserCircle, FaUser, FaKey, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import Loading from "../Loading";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, logout, loading } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleLogout = () => {
     logout();
     navigate("/");
   };
 
+  const handleProfile = () => {
+    navigate("/profile");
+  };
+
+  const handleChangePassword = () => {
+    navigate("/change-password");
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-16 bg-blue-500 px-3 sm:px-6 shadow-md text-white">
-        <div className="animate-spin border-4 border-white border-t-transparent rounded-full w-6 h-6 mr-2"></div>
-        <span>Đang tải...</span>
-      </div>
+      <Loading />
     );
   }
 
@@ -26,13 +44,38 @@ const Navbar = () => {
       <p className="text-base sm:text-lg font-semibold truncate max-w-[60vw]">
         {user ? `${user.fullName}` : "Chào mừng"}
       </p>
-      <button
-        className="px-3 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-300 flex items-center text-sm sm:text-base"
-        onClick={handleLogout}
-      >
-        <FaSignOutAlt className="mr-2" />
-        Đăng xuất
-      </button>
+
+      <div className="relative" ref={dropdownRef}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="focus:outline-none"
+        >
+          <FaUserCircle className="text-3xl" />
+        </button>
+
+        {isOpen && (
+          <div className="absolute right-0 mt-2 w-48 bg-white text-gray-700 rounded-lg shadow-lg overflow-hidden">
+            <button
+              onClick={handleProfile}
+              className="flex items-center w-full px-4 py-2 hover:bg-gray-100"
+            >
+              <FaUser className="mr-2" /> Xem hồ sơ
+            </button>
+            <button
+              onClick={handleChangePassword}
+              className="flex items-center w-full px-4 py-2 hover:bg-gray-100"
+            >
+              <FaKey className="mr-2" /> Đổi mật khẩu
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center w-full px-4 py-2 hover:bg-gray-100 text-red-600"
+            >
+              <FaSignOutAlt className="mr-2" /> Đăng xuất
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

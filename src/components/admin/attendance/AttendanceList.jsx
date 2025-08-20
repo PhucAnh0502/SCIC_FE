@@ -6,6 +6,7 @@ import DataTable from "react-data-table-component";
 import AttendanceListFilters from "./AttendanceListFilters";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loading from "../../Loading";
 
 const AttendanceList = () => {
   const navigate = useNavigate();
@@ -93,14 +94,7 @@ const AttendanceList = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-500 rounded-full animate-spin border-t-transparent mb-4"></div>
-          <p className="text-lg font-semibold text-blue-500 animate-pulse">
-            Loading...
-          </p>
-        </div>
-      </div>
+      <Loading />
     );
   return (
     <div className="p-2 sm:p-4 md:p-8 bg-gray-50 min-h-screen">

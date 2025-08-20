@@ -10,6 +10,7 @@ import {
   getDeviceById,
 } from "../../../utils/AdminHelper";
 import { toast } from "react-toastify";
+import Loading from "../../Loading.jsx";
 
 const AttendanceDetail = () => {
   const { attendanceId } = useParams();
@@ -73,14 +74,7 @@ const AttendanceDetail = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-500 rounded-full animate-spin border-t-transparent mb-4"></div>
-          <p className="text-lg font-semibold text-blue-500 animate-pulse">
-            Đang tải...
-          </p>
-        </div>
-      </div>
+      <Loading />
     );
 
   return (

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import LecturerListFilters from "./LecturerListFilters";
 import LecturerListActions from "./LecturerListActions";
 import { toast } from "react-toastify";
+import Loading from "../../Loading";
 
 const LecturerList = () => {
   const navigate = useNavigate();
@@ -77,14 +78,7 @@ const LecturerList = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-500 rounded-full animate-spin border-t-transparent mb-4"></div>
-          <p className="text-lg font-semibold text-blue-500 animate-pulse">
-            Loading...
-          </p>
-        </div>
-      </div>
+      <Loading />
     );
 
   return (
