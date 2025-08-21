@@ -2,19 +2,19 @@ import React, { useState, useEffect } from "react";
 import { getAllLecturers } from "../../../utils/AdminHelper";
 import DataTable from "react-data-table-component";
 import { columns } from "./LecturerColumn";
-import { useNavigate } from "react-router-dom";
 import LecturerListFilters from "./LecturerListFilters";
 import LecturerListActions from "./LecturerListActions";
 import { toast } from "react-toastify";
 import Loading from "../../Loading";
+import AddLecturer from "./AddLecturer";
 
 const LecturerList = () => {
-  const navigate = useNavigate();
-
   const [lecturers, setLecturers] = useState([]);
   const [filteredLecturers, setFilteredLecturers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
+
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const onLecturerRefresh = () => {
     fetchLecturers();
@@ -59,7 +59,7 @@ const LecturerList = () => {
   };
 
   const handleAddLecturer = () => {
-    navigate(`/admin-dashboard/lecturers/add-lecturer`);
+    setShowAddModal(true);
   };
 
   const filterLecturers = (search) => {
@@ -98,6 +98,23 @@ const LecturerList = () => {
           <DataTable columns={columns} data={filteredLecturers} pagination responsive highlightOnHover striped />
         </div>
       </div>
+
+      {/* Modal AddStudent */}
+      {showAddModal && (
+        <div
+          className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+          onClick={() => setShowAddModal(false)}
+        >
+          <div onClick={(e) => e.stopPropagation()}>
+            <AddLecturer
+              onClose={() => {
+                setShowAddModal(false);
+                fetchLecturers();
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

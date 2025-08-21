@@ -26,7 +26,6 @@ export const getUserById = async (userId) => {
 export const getDefaultUsers = async () => {
   try {
     const res = await beInstance.get("/User/get-defualt-user");
-    toast.success("Lấy thông tin người dùng mặc định thành công!");
     return res.$values;
   } catch (err) {
     toast.error(err?.Message || "Không thể lấy thông tin người dùng");

@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getDefaultUsers } from "../../../utils/AdminHelper";
-import { useNavigate } from "react-router-dom";
 import { beInstance } from "../../../config/axios.js";
 import { toast } from "react-toastify";
 import Loading from "../../Loading.jsx";
 
-const AddLecturer = () => {
+const AddLecturer = ({onClose}) => {
   const [loading, setLoading] = useState(false);
   const [defaultUsers, setDefaultUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [lecturerCode, setLecturerCode] = useState("");
   const [hireDate, setHireDate] = useState("");
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -51,7 +48,7 @@ const AddLecturer = () => {
 
       if (response?.message) {
         toast.success(response.message);
-        navigate(-1);
+        onClose()
       }
     } catch (error) {
       toast.error(error?.Message || "Đăng ký thất bại");
@@ -69,30 +66,16 @@ const AddLecturer = () => {
       className="w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-md space-y-4 mt-10 sm:mt-16 md:mt-20"
     >
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6 gap-2">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition text-sm sm:text-base"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          <span className="hidden xs:inline">Quay lại</span>
-        </button>
         <h2 className="text-xl sm:text-2xl font-bold text-center text-blue-600 flex-1">
           Thêm giảng viên
         </h2>
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-0 text-gray-500 hover:text-gray-700"
+        >
+          ✖
+        </button>
       </div>
 
       <div>
