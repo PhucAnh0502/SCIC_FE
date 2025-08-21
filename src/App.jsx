@@ -8,8 +8,6 @@ import RoleBaseRoutes from "./routes/RoleBaseRoutes";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserList from "./components/admin/users/UserList";
 import StudentList from "./components/admin/students/StudentList";
-import AddStudent from "./components/admin/students/AddStudent";
-import StudentDetail from "./components/admin/students/StudentDetail";
 import AttendanceList from "./components/admin/attendance/AttendanceList";
 import AddAttendance from "./components/admin/attendance/AddAttendance";
 import AttendanceDetail from "./components/admin/attendance/AttendanceDetail";
@@ -62,10 +60,6 @@ function App() {
           <Route
             path="/admin-dashboard/students"
             element={<StudentList onClose={() => window.history.back()} />}
-          />
-          <Route
-            path="/admin-dashboard/students/:userId"
-            element={<StudentDetail onClose={() => window.history.back()} />}
           />
 
           {/* Lecturers */}

@@ -7,16 +7,29 @@ import StudentListFilters from "./StudentListFilters";
 import { toast } from "react-toastify";
 import Loading from "../../Loading";
 import AddStudent from "./AddStudent";
+import StudentDetailModal from "./StudentDetailModal";
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showStudentDetailModal, setShowStudentDetailModal] = useState(false);
 
   const onStudentRefresh = () => {
     fetchStudents();
+  };
+
+  const onViewStudent = (id) => {
+    setSelectedStudentId(id);
+    setShowStudentDetailModal(true);
+  };
+
+  const handleCloseStudentViewModal = () => {
+    setShowStudentDetailModal(false);
+    setSelectedStudentId(null);
   };
 
   const fetchStudents = async () => {
@@ -36,6 +49,7 @@ const StudentList = () => {
             <StudentListActions
               id={student.userId}
               onStudentRefresh={onStudentRefresh}
+              onViewStudent={onViewStudent}
             />
           ),
         }));
@@ -66,7 +80,7 @@ const StudentList = () => {
   const filterStudents = (search) => {
     const data = students.filter((student) => {
       const matchesSearch =
-        (student.fullName?.toLowerCase() || "").includes(
+        (student.userName?.toLowerCase() || "").includes(
           search.toLowerCase()
         ) ||
         (student.studentCode?.toLowerCase() || "").includes(
@@ -131,6 +145,15 @@ const StudentList = () => {
             />
           </div>
         </div>
+      )}
+
+      {/* Modal for Student Detail */}
+      {showStudentDetailModal && (
+        <StudentDetailModal
+          studentId={selectedStudentId}
+          onClose={handleCloseStudentViewModal}
+          onUpdated={fetchStudents}
+        />
       )}
     </div>
   );
