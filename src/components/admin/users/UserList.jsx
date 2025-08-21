@@ -8,18 +8,29 @@ import UserListActions from "./UserListActions";
 import UserListFilters from "./UserListFilters";
 import Loading from "../../Loading";
 import AddUser from "./AddUser";
+import UserDetailModal from "./UserDetailModal";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchtext, setSearchText] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
 
   const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showUserViewModal, setShowUserViewModal] = useState(false);
 
   const handleAddUser = () => setShowAddUserModal(true);
-  const handleCloseModal = () => setShowAddUserModal(false);
+  const handleCloseAddModal = () => setShowAddUserModal(false);
+  const handleViewUser = (id) => {
+    setSelectedUserId(id);
+    setShowUserViewModal(true);
+  };
+  const handleCloseUserViewModal = () => {
+    setShowUserViewModal(false);
+    setSelectedUserId(null);
+  };
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -36,7 +47,11 @@ const UserList = () => {
           email: user.email || "N/A",
           userRoles: user.userRoles?.$values || [],
           action: (
-            <UserListActions id={user.id} onUserRefresh={fetchUsers} />
+            <UserListActions
+              id={user.id}
+              onUserRefresh={fetchUsers}
+              handleViewUser={handleViewUser}
+            />
           ),
         }));
         setUsers(data);
@@ -111,13 +126,22 @@ const UserList = () => {
           <div className="bg-white rounded-2xl p-4 sm:p-8 w-full max-w-md relative">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              onClick={handleCloseModal}
+              onClick={handleCloseAddModal}
             >
               ✖
             </button>
-            <AddUser onClose={handleCloseModal} onUserRefresh={fetchUsers} />
+            <AddUser onClose={handleCloseAddModal} onUserRefresh={fetchUsers} />
           </div>
         </div>
+      )}
+
+      {/* Modal View User */}
+      {showUserViewModal && (
+        <UserDetailModal
+          onClose={handleCloseUserViewModal}
+          userId={selectedUserId}
+          onUserUpdated={fetchUsers}
+        />
       )}
     </div>
   );

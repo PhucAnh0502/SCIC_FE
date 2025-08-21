@@ -1,13 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { FaEye, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import ShowDeleteConfirm from "../../toast/ShowDeleteConfirm";
 import { beInstance } from "../../../config/axios";
 
-const UserListActions = ({ id, onUserRefresh }) => {
-  const navigate = useNavigate();
-  const role = sessionStorage.getItem("role");
+const UserListActions = ({ id, onUserRefresh, handleViewUser }) => {
 
   const handleDelete = async () => {
     if (!id) {
@@ -30,7 +27,7 @@ const UserListActions = ({ id, onUserRefresh }) => {
     <div className="flex flex-wrap gap-2 sm:gap-4 justify-center">
       <button
         title="Xem chi tiết"
-        onClick={() => navigate(`/${role}-dashboard/users/${id}`)}
+        onClick={() => handleViewUser(id)}
         className="border border-blue-600 text-blue-600 p-2 rounded-full hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out transform hover:scale-110 m-1 sm:m-2"
       >
         <FaEye size={18} />

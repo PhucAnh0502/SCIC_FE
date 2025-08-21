@@ -8,7 +8,6 @@ import RoleBaseRoutes from "./routes/RoleBaseRoutes";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserList from "./components/admin/users/UserList";
 import AddUser from "./components/admin/users/AddUser";
-import UserDetail from "./components/admin/users/UserDetail";
 import StudentList from "./components/admin/students/StudentList";
 import AddStudent from "./components/admin/students/AddStudent";
 import StudentDetail from "./components/admin/students/StudentDetail";
@@ -62,10 +61,6 @@ function App() {
           <Route
             path="/admin-dashboard/users/add-user"
             element={<AddUser onClose={() => window.history.back()} />}
-          />
-          <Route
-            path="/admin-dashboard/users/:userId"
-            element={<UserDetail onClose={() => window.history.back()} />}
           />
 
           {/* Students */}
