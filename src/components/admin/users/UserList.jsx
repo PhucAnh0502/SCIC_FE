@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import DataTable from "react-data-table-component";
+import { toast } from "react-toastify";
+
 import { getAllUsers } from "../../../utils/AdminHelper";
 import { columns } from "./UserColumn";
-import DataTable from "react-data-table-component";
 import UserListActions from "./UserListActions";
 import UserListFilters from "./UserListFilters";
-import { toast } from "react-toastify";
 import Loading from "../../Loading";
+import AddUser from "./AddUser";
 
 const UserList = () => {
-  const navigate = useNavigate();
-
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchtext, setSearchText] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
 
-  const onUserRefresh = () => {
-    fetchUsers();
-  };
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+
+  const handleAddUser = () => setShowAddUserModal(true);
+  const handleCloseModal = () => setShowAddUserModal(false);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -36,14 +36,16 @@ const UserList = () => {
           email: user.email || "N/A",
           userRoles: user.userRoles?.$values || [],
           action: (
-            <UserListActions id={user.id} onUserRefresh={onUserRefresh} />
+            <UserListActions id={user.id} onUserRefresh={fetchUsers} />
           ),
         }));
         setUsers(data);
         setFilteredUsers(data);
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Không thể lấy dữ liệu người dùng");
+      toast.error(
+        err.response?.data?.message || "Không thể lấy dữ liệu người dùng"
+      );
     } finally {
       setLoading(false);
     }
@@ -53,44 +55,33 @@ const UserList = () => {
     fetchUsers();
   }, []);
 
-  const handleSearchChange = (e) => {
-    setSearchText(e.target.value);
-  };
-
-  const handleRoleChange = (e) => {
-    setSelectedRole(e.target.value);
-  };
-
-  const handleAddUser = () => {
-    navigate(`/admin-dashboard/users/add-user`);
-  };
+  const handleSearchChange = (e) => setSearchText(e.target.value);
+  const handleRoleChange = (e) => setSelectedRole(e.target.value);
 
   const filterUsers = (search, role) => {
-  const data = users.filter((user) => { 
-    const matchesSearch = user.fullName
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    const roleNames = user.userRoles || []; 
-    const matchesRole = role === "" || roleNames.includes(role);
-    return matchesSearch && matchesRole;
-  });
-  setFilteredUsers(data);
-};
-
+    const data = users.filter((user) => {
+      const matchesSearch = user.fullName
+        .toLowerCase()
+        .includes(search.toLowerCase());
+      const roleNames = user.userRoles || [];
+      const matchesRole = role === "" || roleNames.includes(role);
+      return matchesSearch && matchesRole;
+    });
+    setFilteredUsers(data);
+  };
 
   useEffect(() => {
     filterUsers(searchtext, selectedRole);
-  }, [searchtext, selectedRole]);
+  }, [searchtext, selectedRole, users]);
 
-  if (loading)
-    return (
-      <Loading />
-    );
+  if (loading) return <Loading />;
 
   return (
     <div className="p-2 sm:p-4 md:p-8 bg-gray-50 min-h-screen">
       <div className="text-center">
-        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">Quản lý người dùng</h3>
+        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">
+          Quản lý người dùng
+        </h3>
       </div>
 
       <UserListFilters
@@ -103,9 +94,31 @@ const UserList = () => {
 
       <div className="mt-4 sm:mt-5 w-full overflow-x-auto">
         <div className="min-w-[700px]">
-          <DataTable columns={columns} data={filteredUsers} pagination responsive highlightOnHover striped />
+          <DataTable
+            columns={columns}
+            data={filteredUsers}
+            pagination
+            responsive
+            highlightOnHover
+            striped
+          />
         </div>
       </div>
+
+      {/* Modal AddUser */}
+      {showAddUserModal && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 w-full max-w-md relative">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              onClick={handleCloseModal}
+            >
+              ✖
+            </button>
+            <AddUser onClose={handleCloseModal} onUserRefresh={fetchUsers} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -23,13 +23,13 @@ export const columns = [
     {
       name: "Email",
       selector: (row) => row.email,
-      width: "150px",
+      width: "180px",
     },
     {
       name: "Vai trò",
       selector: (row) => row.userRoles.map((r) => r).join(", "),
       center: "true",
-      width: "180px",
+      width: "150px",
     },
     {
       name: "Thao tác",
