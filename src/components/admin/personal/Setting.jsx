@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { beInstance } from "../../../config/axios";
 import UserInfo from "../users/UserInfo";
 import Loading from "../../Loading.jsx";
+import PersonalProfileModal from "./PersonalProfileModal.jsx";
 
 const Setting = () => {
   const userId = sessionStorage.getItem("userId");
@@ -11,13 +12,14 @@ const Setting = () => {
 
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const fetchUser = async () => {
     setLoading(true);
     try {
       const response = await beInstance.get(`/User/${userId}`);
       toast.success("Lấy thông tin người dùng thành công!");
-      setUser(response);
+      setUser(response.data); // chỉnh lại lấy data từ response
     } catch (err) {
       toast.error(err?.response?.data?.Message || "Không thể lấy dữ liệu.");
     } finally {
@@ -29,13 +31,11 @@ const Setting = () => {
     fetchUser();
   }, []);
 
-  if (loading)
-    return (
-      <Loading />
-    );
+  if (loading) return <Loading />;
 
   return (
     <div className="p-2 sm:p-4 md:p-6 max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto bg-white shadow-md rounded-lg mt-6 sm:mt-10 space-y-4 sm:space-y-6">
+      {/* Nút quay lại */}
       <div>
         <button
           type="button"
@@ -49,22 +49,26 @@ const Setting = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           <span className="hidden xs:inline">Quay lại</span>
         </button>
       </div>
 
+      {/* Thông tin user */}
       <div className="text-center">
         <UserInfo user={user} />
       </div>
 
-      <div className="flex justify-center">
+      {/* Các nút chức năng */}
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <button
+          className="w-full sm:w-auto bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded font-medium text-sm sm:text-base"
+          onClick={() => setIsProfileOpen(true)}
+        >
+          Xem hồ sơ
+        </button>
+
         <button
           className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium text-sm sm:text-base"
           onClick={() => navigate("/admin-dashboard/setting/change-password")}
@@ -72,6 +76,13 @@ const Setting = () => {
           Đổi mật khẩu
         </button>
       </div>
+
+      {/* Modal */}
+      <PersonalProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        user={user}
+      />
     </div>
   );
 };

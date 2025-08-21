@@ -1,42 +1,42 @@
-import axios from "axios";
 import React, { useState } from "react";
+import axios from "axios";
+import { FaTimes } from "react-icons/fa";
 import env from "../../config/env";
-import { useNavigate } from "react-router-dom";
 import { getBeToken } from "../../config/token.js";
 import { toast } from "react-toastify";
 
-const ChangePassword = () => {
+const ChangePassword = ({ isOpen, onClose, userId }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const userId = sessionStorage.getItem("userId");
-  const navigate = useNavigate()
+
+  if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     if (newPassword !== confirmPassword) {
-      setError("New password and confirm password must be the same");
-      return
+      setError("Mật khẩu mới và xác nhận mật khẩu không khớp");
+      return;
     }
 
     try {
       const response = await axios.put(
-        `${
-          env.BE_API_PATH
-        }/Auth/change-password/${userId}?newPassword=${encodeURI(newPassword)}`,{},
+        `${env.BE_API_PATH}/Auth/change-password/${userId}?newPassword=${encodeURI(newPassword)}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${getBeToken()}`,
           },
         }
       );
+
       if (response.status === 200) {
         toast.success(response.data.message || "Đổi mật khẩu thành công");
         setTimeout(() => {
-          navigate(-1)
-        },2000)
+          onClose();
+        }, 1500);
       }
     } catch (error) {
       toast.error(
@@ -44,57 +44,65 @@ const ChangePassword = () => {
       );
     }
   };
+
   return (
-    <div className="flex flex-col items-center h-screen justify-center bg-gradient-to-b from-blue-100 to-blue-300 space-y-6">
-      <div className="border shadow-lg rounded-lg p-4 sm:p-6 w-full max-w-md bg-white">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-blue-600">
-          Đổi mật khẩu
-        </h2>
-        {error && <p className="text-red-500">{error}</p>}
-        <form
-          className="rounded-lg border border-gray-200 p-4 sm:p-6"
-          onSubmit={handleSubmit}
-        >
-          <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-medium mb-2"
-            >
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      {/* Overlay */}
+      <div className="fixed inset-0 bg-black/30" onClick={onClose}></div>
+
+      {/* Modal */}
+      <div
+        className="relative bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md z-50"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4 border-b pb-2">
+          <h2 className="text-xl font-bold text-blue-600">Đổi mật khẩu</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-red-600 transition"
+          >
+            <FaTimes size={20} />
+          </button>
+        </div>
+
+        {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
               Nhập mật khẩu mới
             </label>
             <input
-              name="newPassword"
               type="password"
-              placeholder="*********"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="********"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
-          <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-medium mb-2"
-            >
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
               Nhập lại mật khẩu mới
             </label>
             <input
-              name="confirmPassword"
               type="password"
-              placeholder="*********"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="********"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
-          <div className="mb-4 mt-8">
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-            >
-              Đổi mật khẩu
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            Đổi mật khẩu
+          </button>
         </form>
       </div>
     </div>

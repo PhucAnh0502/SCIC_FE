@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Regiser from "./components/auth/Regiser";
 import ForgotPassword from "./components/auth/ForgotPassword";
-import ChangePassword from "./components/auth/ChangePassword";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import RoleBaseRoutes from "./routes/RoleBaseRoutes";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -13,7 +12,6 @@ import UserDetail from "./components/admin/users/UserDetail";
 import StudentList from "./components/admin/students/StudentList";
 import AddStudent from "./components/admin/students/AddStudent";
 import StudentDetail from "./components/admin/students/StudentDetail";
-import Setting from "./components/admin/settings/Setting";
 import AttendanceList from "./components/admin/attendance/AttendanceList";
 import AddAttendance from "./components/admin/attendance/AddAttendance";
 import AttendanceDetail from "./components/admin/attendance/AttendanceDetail";
@@ -26,9 +24,10 @@ import AddLecturer from "./components/admin/lecturers/AddLecturer";
 import DeviceList from "./components/admin/devices/DeviceList";
 import DeviceDetail from "./components/admin/devices/DeviceDetail";
 import AdminSummary from "./components/admin/summary/AdminSummary";
+import LogList from "./components/admin/checkLogs/LogList";
+import NotFound from "./pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LogList from "./components/admin/checkLogs/LogList";
 
 function App() {
   return (
@@ -39,6 +38,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Regiser />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="*" element={<NotFound />} />
 
         {/* Admin */}
         <Route
@@ -142,17 +142,6 @@ function App() {
           <Route
             path="/admin-dashboard/permissions/create-permission"
             element={<CreatePermission onClose={() => window.history.back()} />}
-          />
-
-          {/* Setting */}
-          <Route
-            path="/admin-dashboard/setting"
-            element={<Setting onClose={() => window.history.back()} />}
-          />
-
-          <Route
-            path="/admin-dashboard/setting/change-password"
-            element={<ChangePassword onClose={() => window.history.back()}/>}
           />
         </Route>
       </Routes>
