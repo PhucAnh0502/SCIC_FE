@@ -8,7 +8,7 @@ export const columns = [
     {
       name: "Tên đăng nhập",
       selector: (row) => row.userName,
-      width: "150px",
+      width: "180px",
     },
     {
       name: "MSSV",
@@ -18,7 +18,7 @@ export const columns = [
     {
       name: "Email",
       selector: (row) => row.email,
-      width: "150px",
+      width: "200px",
     },
     {
       name: "Ngày đăng ký",

@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getDefaultUsers } from "../../../utils/AdminHelper";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { beInstance } from "../../../config/axios";
 import Loading from "../../Loading.jsx";
 
-const AddStudent = () => {
+const AddStudent = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [defaultUsers, setDefaultUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [studentCode, setStudentCode] = useState("");
   const [enrollDate, setEnrollDate] = useState("");
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -45,48 +42,31 @@ const AddStudent = () => {
         { studentCode, enrollDate }
       );
       toast.success(response.message || "Thêm sinh viên thành công");
-      navigate(-1);
+      onClose();
     } catch (error) {
       console.log(error);
       toast.error(error.message || "Đăng ký thất bại");
     }
   };
 
-  if (loading)
-    return (
-      <Loading />
-    );
+  if (loading) return <Loading />;
 
   return (
     <form
       onSubmit={handleSubmit}
       className="w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-md space-y-4 mt-10 sm:mt-16 md:mt-20"
     >
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6 gap-2">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          <span className="hidden sm:inline">Quay lại</span>
-        </button>
-        <h2 className="text-xl sm:text-2xl font-bold text-center text-blue-600 flex-1">
+      <div className="relative flex items-center justify-center mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-blue-600 text-center">
           Thêm sinh viên
         </h2>
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-0 text-gray-500 hover:text-gray-700"
+        >
+          ✖
+        </button>
       </div>
 
       <div>
@@ -127,12 +107,21 @@ const AddStudent = () => {
         />
       </div>
 
-      <button
-        type="submit"
-        className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-base font-semibold"
-      >
-        Thêm sinh viên
-      </button>
+      <div className="flex gap-2 justify-end">
+        <button
+          type="button"
+          onClick={onClose}
+          className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+        >
+          Hủy
+        </button>
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Thêm sinh viên
+        </button>
+      </div>
     </form>
   );
 };

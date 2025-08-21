@@ -7,7 +7,6 @@ import PrivateRoutes from "./routes/PrivateRoutes";
 import RoleBaseRoutes from "./routes/RoleBaseRoutes";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserList from "./components/admin/users/UserList";
-import AddUser from "./components/admin/users/AddUser";
 import StudentList from "./components/admin/students/StudentList";
 import AddStudent from "./components/admin/students/AddStudent";
 import StudentDetail from "./components/admin/students/StudentDetail";
@@ -58,10 +57,6 @@ function App() {
             path="/admin-dashboard/users"
             element={<UserList onClose={() => window.history.back()} />}
           />
-          <Route
-            path="/admin-dashboard/users/add-user"
-            element={<AddUser onClose={() => window.history.back()} />}
-          />
 
           {/* Students */}
           <Route
@@ -71,10 +66,6 @@ function App() {
           <Route
             path="/admin-dashboard/students/:userId"
             element={<StudentDetail onClose={() => window.history.back()} />}
-          />
-          <Route
-            path="/admin-dashboard/students/add-student"
-            element={<AddStudent onClose={() => window.history.back()} />}
           />
 
           {/* Lecturers */}

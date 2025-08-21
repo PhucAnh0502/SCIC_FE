@@ -4,17 +4,16 @@ import StudentListActions from "./StudentListAction";
 import DataTable from "react-data-table-component";
 import { columns } from "./StudentColumn";
 import StudentListFilters from "./StudentListFilters";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../../Loading";
+import AddStudent from "./AddStudent";
 
 const StudentList = () => {
-  const navigate = useNavigate();
-
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const onStudentRefresh = () => {
     fetchStudents();
@@ -44,7 +43,9 @@ const StudentList = () => {
         setFilteredStudents(data);
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Không thể lấy dữ liệu sinh viên");
+      toast.error(
+        err.response?.data?.message || "Không thể lấy dữ liệu sinh viên"
+      );
     } finally {
       setLoading(false);
     }
@@ -59,14 +60,18 @@ const StudentList = () => {
   };
 
   const handleAddStudent = () => {
-    navigate(`/admin-dashboard/students/add-student`);
+    setShowAddModal(true);
   };
 
   const filterStudents = (search) => {
     const data = students.filter((student) => {
       const matchesSearch =
-        (student.fullName?.toLowerCase() || "").includes(search.toLowerCase()) ||
-        (student.studentCode?.toLowerCase() || "").includes(search.toLowerCase());
+        (student.fullName?.toLowerCase() || "").includes(
+          search.toLowerCase()
+        ) ||
+        (student.studentCode?.toLowerCase() || "").includes(
+          search.toLowerCase()
+        );
       return matchesSearch;
     });
     setFilteredStudents(data);
@@ -76,15 +81,14 @@ const StudentList = () => {
     filterStudents(searchText);
   }, [searchText]);
 
-  if (loading)
-    return (
-      <Loading />
-    );
+  if (loading) return <Loading />;
 
   return (
     <div className="p-2 sm:p-4 md:p-8 bg-gray-50 min-h-screen">
       <div className="text-center">
-        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">Quản lý sinh viên</h3>
+        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">
+          Quản lý sinh viên
+        </h3>
       </div>
 
       <div className="mb-4">
@@ -111,6 +115,23 @@ const StudentList = () => {
           />
         </div>
       </div>
+
+      {/* Modal AddStudent */}
+      {showAddModal && (
+        <div
+          className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+          onClick={() => setShowAddModal(false)}
+        >
+          <div onClick={(e) => e.stopPropagation()}>
+            <AddStudent
+              onClose={() => {
+                setShowAddModal(false);
+                fetchStudents();
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
