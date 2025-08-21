@@ -7,17 +7,30 @@ import LecturerListActions from "./LecturerListActions";
 import { toast } from "react-toastify";
 import Loading from "../../Loading";
 import AddLecturer from "./AddLecturer";
+import LecturerDetailModal from "./LecturerDetailModal";
 
 const LecturerList = () => {
   const [lecturers, setLecturers] = useState([]);
+  const [selectedLecturerId, setSelectedLecturerId] = useState(null);
   const [filteredLecturers, setFilteredLecturers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
 
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showViewLecturerModal, setShowViewLecturerModal] = useState(false);
 
   const onLecturerRefresh = () => {
     fetchLecturers();
+  };
+
+  const onViewLecturer = (id) => {
+    setSelectedLecturerId(id);
+    setShowViewLecturerModal(true);
+  };
+
+  const handleCloseViewLecturerModal = () => {
+    setShowViewLecturerModal(false);
+    setSelectedLecturerId(null);
   };
 
   useEffect(() => {
@@ -41,6 +54,7 @@ const LecturerList = () => {
             <LecturerListActions
               id={lecturer.userId}
               onlecturerRefresh={onLecturerRefresh}
+              onViewLecturer={onViewLecturer}
             />
           ),
         }));
@@ -48,7 +62,9 @@ const LecturerList = () => {
         setFilteredLecturers(data);
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Không thể lấy dữ liệu giảng viên");
+      toast.error(
+        err.response?.data?.message || "Không thể lấy dữ liệu giảng viên"
+      );
     } finally {
       setLoading(false);
     }
@@ -76,15 +92,14 @@ const LecturerList = () => {
     filterLecturers(searchText);
   }, [searchText]);
 
-  if (loading)
-    return (
-      <Loading />
-    );
+  if (loading) return <Loading />;
 
   return (
     <div className="p-2 sm:p-4 md:p-8 bg-gray-50 min-h-screen">
       <div className="text-center">
-        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">Quản lý giảng viên</h3>
+        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">
+          Quản lý giảng viên
+        </h3>
       </div>
 
       <LecturerListFilters
@@ -95,7 +110,14 @@ const LecturerList = () => {
 
       <div className="mt-4 sm:mt-5 w-full overflow-x-auto">
         <div className="min-w-[600px]">
-          <DataTable columns={columns} data={filteredLecturers} pagination responsive highlightOnHover striped />
+          <DataTable
+            columns={columns}
+            data={filteredLecturers}
+            pagination
+            responsive
+            highlightOnHover
+            striped
+          />
         </div>
       </div>
 
@@ -114,6 +136,15 @@ const LecturerList = () => {
             />
           </div>
         </div>
+      )}
+
+      {/* Modal View Lecturer */}
+      {showViewLecturerModal && (
+        <LecturerDetailModal
+          userId={selectedLecturerId}
+          onClose={handleCloseViewLecturerModal}
+          onUpdated={fetchLecturers}
+        />
       )}
     </div>
   );
