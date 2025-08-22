@@ -4,7 +4,7 @@ import { beInstance } from "../../../config/axios.js";
 import { toast } from "react-toastify";
 import Loading from "../../Loading.jsx";
 
-const AddLecturer = ({onClose}) => {
+const AddLecturer = ({onClose, onSuccess}) => {
   const [loading, setLoading] = useState(false);
   const [defaultUsers, setDefaultUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
@@ -48,7 +48,7 @@ const AddLecturer = ({onClose}) => {
 
       if (response?.message) {
         toast.success(response.message);
-        onClose()
+        onSuccess()
       }
     } catch (error) {
       toast.error(error?.Message || "Đăng ký thất bại");
@@ -65,9 +65,9 @@ const AddLecturer = ({onClose}) => {
       onSubmit={handleSubmit}
       className="w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-md space-y-4 mt-10 sm:mt-16 md:mt-20"
     >
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6 gap-2">
-        <h2 className="text-xl sm:text-2xl font-bold text-center text-blue-600 flex-1">
-          Thêm giảng viên
+      <div className="relative flex items-center justify-center mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-blue-600 text-center">
+          Thêm sinh viên
         </h2>
         <button
           type="button"
@@ -118,12 +118,21 @@ const AddLecturer = ({onClose}) => {
         />
       </div>
 
-      <button
-        type="submit"
-        className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-base font-semibold"
-      >
-        Thêm giảng viên
-      </button>
+      <div className="flex gap-2 justify-end">
+        <button
+          type="button"
+          onClick={onClose}
+          className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+        >
+          Hủy
+        </button>
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Thêm sinh viên
+        </button>
+      </div>
     </form>
   );
 };

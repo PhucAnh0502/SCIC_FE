@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { beInstance } from "../../../config/axios";
 import Loading from "../../Loading.jsx";
 
-const AddStudent = ({ onClose }) => {
+const AddStudent = ({ onClose, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [defaultUsers, setDefaultUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
@@ -42,7 +42,7 @@ const AddStudent = ({ onClose }) => {
         { studentCode, enrollDate }
       );
       toast.success(response.message || "Thêm sinh viên thành công");
-      onClose();
+      onSuccess();
     } catch (error) {
       console.log(error);
       toast.error(error.message || "Đăng ký thất bại");

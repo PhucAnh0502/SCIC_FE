@@ -8,12 +8,12 @@ export const columns = [
     {
       name: "Tên thiết bị",
       selector: (row) => row.name,
-      width: "250px",
+      width: "220px",
     },
     {
       name: "Loại thiết bị",
       selector: (row) => row.type,
-      width: "250px",
+      width: "220px",
     },
     {
       name: "Nhãn thiết bị",
@@ -29,5 +29,6 @@ export const columns = [
       name: "Thao tác",
       selector: (row) => row.action,
       center: "true",
+      width: "180px",
     },
   ];

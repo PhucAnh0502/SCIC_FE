@@ -140,6 +140,9 @@ const StudentList = () => {
             <AddStudent
               onClose={() => {
                 setShowAddModal(false);
+              }}
+              onSuccess={() => {
+                setShowAddModal(false);
                 fetchStudents();
               }}
             />

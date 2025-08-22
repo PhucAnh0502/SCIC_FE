@@ -131,6 +131,9 @@ const LecturerList = () => {
             <AddLecturer
               onClose={() => {
                 setShowAddModal(false);
+              }}
+              onSuccess={() => {
+                setShowAddModal(false);
                 fetchLecturers();
               }}
             />
