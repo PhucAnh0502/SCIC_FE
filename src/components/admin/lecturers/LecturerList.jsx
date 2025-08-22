@@ -5,7 +5,7 @@ import { columns } from "./LecturerColumn";
 import LecturerListFilters from "./LecturerListFilters";
 import LecturerListActions from "./LecturerListActions";
 import { toast } from "react-toastify";
-import Loading from "../../Loading";
+import Loading from "../../common/Loading";
 import AddLecturer from "./AddLecturer";
 import LecturerDetailModal from "./LecturerDetailModal";
 

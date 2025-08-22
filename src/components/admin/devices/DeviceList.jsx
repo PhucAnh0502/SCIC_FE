@@ -5,7 +5,7 @@ import DeviceListFilters from "./DeviceListFilter";
 import { columns } from "./DeviceColumn";
 import DeviceListActions from "./DeviceListActions";
 import { toast } from "react-toastify";
-import Loading from "../../Loading";
+import Loading from "../../common/Loading";
 import DeviceDetailModal from "./DeviceDetailModal";
 
 const DeviceList = () => {

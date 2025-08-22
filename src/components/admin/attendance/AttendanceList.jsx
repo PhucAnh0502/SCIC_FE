@@ -6,7 +6,7 @@ import DataTable from "react-data-table-component";
 import AttendanceListFilters from "./AttendanceListFilters";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loading from "../../Loading";
+import Loading from "../../common/Loading";
 
 const AttendanceList = () => {
   const navigate = useNavigate();

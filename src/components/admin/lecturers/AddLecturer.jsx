@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getDefaultUsers } from "../../../utils/AdminHelper";
 import { beInstance } from "../../../config/axios.js";
 import { toast } from "react-toastify";
-import Loading from "../../Loading.jsx";
+import Loading from "../../common/Loading.jsx";
 
 const AddLecturer = ({onClose, onSuccess}) => {
   const [loading, setLoading] = useState(false);

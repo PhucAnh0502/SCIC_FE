@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getDeviceById } from "../../../utils/AdminHelper.jsx";
 import { toast } from "react-toastify";
-import Loading from "../../Loading.jsx";
+import Loading from "../../common/Loading.jsx";
 
 const DeviceDetailModal = ({ id, onClose }) => {
   const [loading, setLoading] = useState(false);

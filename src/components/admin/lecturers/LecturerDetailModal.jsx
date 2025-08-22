@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { beInstance } from "../../../config/axios";
 import { toast } from "react-toastify";
-import Loading from "../../Loading";
+import Loading from "../../common/Loading";
 
 const LecturerDetailModal = ({ userId, onClose, onUpdated }) => {
   const [lecturer, setLecturer] = useState(null);

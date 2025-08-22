@@ -10,7 +10,7 @@ import {
   getDeviceById,
 } from "../../../utils/AdminHelper";
 import { toast } from "react-toastify";
-import Loading from "../../Loading.jsx";
+import Loading from "../../common/Loading.jsx";
 
 const AttendanceDetail = () => {
   const { attendanceId } = useParams();

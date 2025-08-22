@@ -8,7 +8,7 @@ import {
 import DataTable from "react-data-table-component";
 import { columns } from "./LogListColumn";
 import LogFilters from "./LogFilters";
-import Loading from "../../Loading";
+import Loading from "../../common/Loading";
 
 const LogList = () => {
   const [loading, setLoading] = useState(false);

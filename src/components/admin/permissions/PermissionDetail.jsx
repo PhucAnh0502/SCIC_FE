@@ -5,7 +5,7 @@ import { getAllDevices, getAllUsers } from "../../../utils/AdminHelper";
 import { beInstance } from "../../../config/axios";
 import PermissionInfo from "./PermissionInfo";
 import UpdatePermission from "./UpdatePermission";
-import Loading from "../../Loading";
+import Loading from "../../common/Loading";
 
 const PermissionDetail = () => {
   const { permissionId } = useParams();

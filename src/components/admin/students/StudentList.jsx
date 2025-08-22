@@ -5,7 +5,7 @@ import DataTable from "react-data-table-component";
 import { columns } from "./StudentColumn";
 import StudentListFilters from "./StudentListFilters";
 import { toast } from "react-toastify";
-import Loading from "../../Loading";
+import Loading from "../../common/Loading";
 import AddStudent from "./AddStudent";
 import StudentDetailModal from "./StudentDetailModal";
 

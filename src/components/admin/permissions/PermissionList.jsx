@@ -6,7 +6,7 @@ import PermissionListActions from './PermissionListActions'
 import PermissionListFilters from './PermissionsListFilters'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import Loading from '../../Loading'
+import Loading from '../../common/Loading'
 
 const PermissionList = () => {
   const navigate = useNavigate()

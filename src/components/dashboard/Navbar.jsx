@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { FaUserCircle, FaUser, FaKey, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import Loading from "../Loading";
+import Loading from "../common/Loading";
 import PersonalProfileModal from "../admin/personal/PersonalProfileModal"; 
 import ChangePassword from "../auth/ChangePassword";
 

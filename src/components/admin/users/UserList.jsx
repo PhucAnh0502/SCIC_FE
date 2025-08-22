@@ -6,7 +6,7 @@ import { getAllUsers } from "../../../utils/AdminHelper";
 import { columns } from "./UserColumn";
 import UserListActions from "./UserListActions";
 import UserListFilters from "./UserListFilters";
-import Loading from "../../Loading";
+import Loading from "../../common/Loading";
 import AddUser from "./AddUser";
 import UserDetailModal from "./UserDetailModal";
 

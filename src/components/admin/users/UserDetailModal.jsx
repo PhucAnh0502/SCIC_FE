@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { beInstance } from "../../../config/axios";
 import { getBeToken } from "../../../config/token";
-import Loading from "../../Loading.jsx";
+import Loading from "../../common/Loading.jsx";
 
 const UserDetailModal = ({ userId, onClose, onUserUpdated }) => {
   const [user, setUser] = useState(null);
