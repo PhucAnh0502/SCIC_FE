@@ -6,25 +6,34 @@ import { columns } from "./DeviceColumn";
 import DeviceListActions from "./DeviceListActions";
 import { toast } from "react-toastify";
 import Loading from "../../Loading";
-//import { useNavigate } from "react-router-dom";
+import DeviceDetailModal from "./DeviceDetailModal";
 
 const DeviceList = () => {
-  //const navigate = useNavigate();
-
   const [devices, setDevices] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [isViewDetailModal, setIsViewDetailModal] = useState(false);
+  const [selectedDeviceId, setSelectedDeviceId] = useState(null);
 
-//   const onDeviceRefresh = () => {
-//     fetchDevices();
-//   };
+  const onViewDevice = (id) => {
+    setSelectedDeviceId(id);
+    setIsViewDetailModal(true);
+  };
+
+  const onCloseViewDevice = () => {
+    setIsViewDetailModal(false);
+    setSelectedDeviceId(null);
+  };
+
+  const onDeviceRefresh = () => {
+    fetchDevices();
+  };
 
   const fetchDevices = async () => {
     setLoading(true);
     try {
-      const devices = await getAllDevices(10,0);
-      console.log("Devices:", devices);
+      const devices = await getAllDevices(10, 0);
       if (devices) {
         let sno = 1;
         const data = devices.map((device) => ({
@@ -34,13 +43,27 @@ const DeviceList = () => {
           type: device.type || "N/A",
           label: device.label || "N/A",
           active: device.active,
-          action: <DeviceListActions id={device.id.id}/>,
+          action: (
+            <DeviceListActions
+              id={device.id.id}
+              onDeviceRefresh={onDeviceRefresh}
+              onViewDevice={onViewDevice}
+            />
+          ),
         }));
-        setDevices(data);
-        setFilteredDevices(data);
+
+        const sortedData = data.sort((a, b) => {
+          if (a.active === b.active) return 0;
+          return a.active ? -1 : 1;
+        });
+
+        setDevices(sortedData);
+        setFilteredDevices(sortedData);
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Không thể lấy danh sách thiết bị.");
+      toast.error(
+        err.response?.data?.message || "Không thể lấy danh sách thiết bị."
+      );
     } finally {
       setLoading(false);
     }
@@ -53,10 +76,6 @@ const DeviceList = () => {
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
   };
-
-//   const handleAddLecturer = () => {
-//     navigate(`/admin-dashboard/lecturers/add-lecturer`);
-//   };
 
   const filterDevices = (search) => {
     const data = devices.filter((device) => {
@@ -72,15 +91,14 @@ const DeviceList = () => {
     filterDevices(searchText);
   }, [searchText]);
 
-  if (loading)
-    return (
-      <Loading />
-    );
+  if (loading) return <Loading />;
 
   return (
     <div className="p-2 sm:p-4 md:p-8 bg-gray-50 min-h-screen">
       <div className="text-center">
-        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">Quản lý thiết bị</h3>
+        <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-5">
+          Quản lý thiết bị
+        </h3>
       </div>
 
       <DeviceListFilters
@@ -90,9 +108,20 @@ const DeviceList = () => {
 
       <div className="mt-4 sm:mt-5 w-full overflow-x-auto">
         <div className="min-w-[700px]">
-          <DataTable columns={columns} data={filteredDevices} pagination responsive highlightOnHover striped />
+          <DataTable
+            columns={columns}
+            data={filteredDevices}
+            pagination
+            responsive
+            highlightOnHover
+            striped
+          />
         </div>
       </div>
+
+      {isViewDetailModal && (
+        <DeviceDetailModal id={selectedDeviceId} onClose={onCloseViewDevice}/>
+      )}
     </div>
   );
 };

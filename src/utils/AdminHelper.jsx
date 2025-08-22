@@ -93,7 +93,6 @@ export const getAllDevices = async (pageSize, page) => {
 export const getDeviceById = async (deviceId) => {
   try {
     const res = await tbInstance.get(`/device/info/${deviceId}`);
-    toast.success("Lấy thông tin thiết bị thành công!");
     return res;
   } catch (err) {
     toast.error(err?.message || "Không thể lấy thông tin thiết bị");
