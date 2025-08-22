@@ -55,7 +55,7 @@ const Navbar = () => {
             onClick={() => setIsOpen(!isOpen)}
             className="focus:outline-none"
           >
-            <FaUserCircle className="text-3xl text-blue-600" />
+            <FaUserCircle className="text-4xl text-blue-600" />
           </button>
 
           {isOpen && (
