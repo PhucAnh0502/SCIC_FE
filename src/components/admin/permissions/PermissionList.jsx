@@ -4,18 +4,17 @@ import DataTable from 'react-data-table-component'
 import { columns } from './PermissionListColumn'
 import PermissionListActions from './PermissionListActions'
 import PermissionListFilters from './PermissionsListFilters'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Loading from '../../common/Loading'
+import CreatePermission from './CreatePermission'
 
 const PermissionList = () => {
-  const navigate = useNavigate()
-
   const [loading, setLoading] = useState(false)
   const [permissions, setPermissions] = useState([])
   const [filteredPermissions, setFilteredPermissions] = useState([])
   const [filterStartDate, setFilterStartDate] = useState("")
   const [filterEndDate, setFilterEndDate] = useState("")
+  const [addModal, setAddModal] = useState(false)
 
   const onPermissionRefresh = () => {
     fetchPermissionList()
@@ -53,7 +52,7 @@ const PermissionList = () => {
   },[])
 
   const handleAddPermission = () => {
-    navigate("/admin-dashboard/permissions/create-permission")
+    setAddModal(true)
   }
 
   const filterPermission = (sDate, eDate) => {
@@ -110,6 +109,25 @@ const PermissionList = () => {
           />
         </div>
       </div>
+
+      {addModal && (
+        <div
+          className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+          onClick={() => setAddModal(false)}
+        >
+          <div onClick={(e) => e.stopPropagation()}>
+            <CreatePermission
+              onClose={() => {
+                setAddModal(false)
+              }}
+              onSuccess={() => {
+                setAddModal(false)
+                fetchPermissionList();
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
